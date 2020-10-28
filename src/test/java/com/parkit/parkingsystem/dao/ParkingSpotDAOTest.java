@@ -40,7 +40,7 @@ public class ParkingSpotDAOTest {
         appender.reset();
     }
 
-    @Disabled
+    @Disabled //TODO
     @Test
     public void getNextAvailableSlotForBike() throws Exception {
 
@@ -49,7 +49,7 @@ public class ParkingSpotDAOTest {
         parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE);
     }
 
-    @Disabled
+    @Disabled //TODO
     @Test
     public void getNextAvailableSlotForCar(){
 

@@ -8,5 +8,7 @@ public enum ParkingType {
     /**
      * Bike.
      */
-    BIKE
+    BIKE,
+
+    TEST
 }

@@ -38,18 +38,16 @@ public class FareCalculatorService {
 
         ParkingType parkingType = ticket.getParkingSpot().getParkingType();
 
-        if (parkingType == null) {
+        if (parkingType == null) {  //parking type ne peut pas être égal à nul sinon n'aurait pas pu rentrer
             throw new IllegalArgumentException("Unkown Parking Type");
         } else {
             switch (parkingType) {
-                case CAR: {
+                case CAR:
                     ticket.setPrice(duration * Fare.CAR_RATE_PER_HOUR);
                     break;
-                }
-                case BIKE: {
+                case BIKE:
                     ticket.setPrice(duration * Fare.BIKE_RATE_PER_HOUR);
                     break;
-                }
                 default:
             }
         }

@@ -21,7 +21,7 @@ public class TicketDAO {
     /**
      * @see Logger
      */
-    private static final Logger logger = LogManager.getLogger("TicketDAO");
+    private static final Logger LOGGER = LogManager.getLogger("TicketDAO");
     /**
      * @see DataBaseConfig
      */
@@ -47,7 +47,7 @@ public class TicketDAO {
                     : (Timestamp.valueOf(ticket.getOutTime())));
             return ps.execute();
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            LOGGER.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
         }
@@ -58,9 +58,8 @@ public class TicketDAO {
      * Get the ticket.
      * @param vehicleRegNumber from user
      * @return ticket
-     * @throws Exception if no spot are available
      */
-    public Ticket getTicket(final String vehicleRegNumber) throws Exception {
+    public Ticket getTicket(final String vehicleRegNumber) {
         Connection con = null;
         Ticket ticket = null;
         try {
@@ -83,11 +82,39 @@ public class TicketDAO {
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
         } catch (Exception ex) {
-            logger.error("Error fetching next available slot", ex);
+            LOGGER.error("Error fetching next available slot", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
         }
         return ticket;
+    }
+
+    /**
+     * Find ticket by Vehicle Reg Number.
+     * @param vehicleRegNumber from user
+     * @return true if one ticket contains vehicle reg number
+     */
+    public boolean checkTicketByVehicleRegNumber(
+            final String vehicleRegNumber) {
+        // si contient un ticket avec vehicleRegNumber return True
+        // si ne contient pas de ticket avec vehicleRegNumber return false
+        Connection con = null;
+        boolean isRecurrent = false;
+        try {
+            con = dataBaseConfig.getConnection();
+            PreparedStatement ps = con.prepareStatement(
+                    DBConstants.FIND_TICKET_BY_VEHICLE_REG_NUMBER);
+            ps.setString(1, vehicleRegNumber);
+            ResultSet rs = ps.executeQuery();
+            isRecurrent = rs.next();
+            dataBaseConfig.closeResultSet(rs);
+            dataBaseConfig.closePreparedStatement(ps);
+        } catch (Exception ex) {
+            LOGGER.error("Error checking recurrence", ex);
+        } finally {
+            dataBaseConfig.closeConnection(con);
+        }
+        return isRecurrent;
     }
 
     /**
@@ -107,7 +134,7 @@ public class TicketDAO {
             ps.execute();
             return true;
         } catch (Exception ex) {
-            logger.error("Error saving ticket info", ex);
+            LOGGER.error("Error saving ticket info", ex);
         } finally {
             dataBaseConfig.closeConnection(con);
         }

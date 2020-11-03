@@ -13,7 +13,9 @@ public class FareCalculatorService {
 
     /**
      * Calculate fare.
-     *
+     * If user stay less or equal to 30 min, price will be 0.
+     * If vehicleRegNumber is already in DB, then price will be 5% reducing.
+     * //TODO
      * @param ticket from user
      */
     public void calculateFare(final Ticket ticket) {
@@ -32,6 +34,9 @@ public class FareCalculatorService {
         final double freeDuration = 0.5;
         if (duration <= freeDuration) {
             ticket.setPrice(0);
+
+        // si checkTicketByVehicleRegNumber is true alors set price - 5%
+
         } else {
             switch (parkingType) {
                 case CAR:

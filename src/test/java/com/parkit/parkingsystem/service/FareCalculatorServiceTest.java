@@ -8,12 +8,15 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static com.parkit.parkingsystem.constants.ParkingType.TEST;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.time.LocalDateTime;
 
+@ExtendWith(MockitoExtension.class)
 public class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
@@ -27,6 +30,7 @@ public class FareCalculatorServiceTest {
     @BeforeEach
     private void setUpPerTest() {
         ticket = new Ticket();
+
     }
 
     @Test
@@ -121,7 +125,7 @@ public class FareCalculatorServiceTest {
     public void calculateFareTesUnknownType() {
         LocalDateTime outTime = LocalDateTime.now();
         LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, TEST, false); //TODO
+        ParkingSpot parkingSpot = new ParkingSpot(1, TEST, false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);

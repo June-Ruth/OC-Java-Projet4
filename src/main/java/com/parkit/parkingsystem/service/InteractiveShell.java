@@ -19,13 +19,26 @@ public class InteractiveShell {
     private static final Logger LOGGER =
             LoggerFactory.getLogger(InteractiveShell.class);
 
-    static InputReaderUtil inputReaderUtil = new InputReaderUtil(new Scanner(System.in));
+    /**
+     * Define Input origin.
+     */
+    static InputReaderUtil inputReaderUtil =
+            new InputReaderUtil(new Scanner(System.in));
 
+    /**
+     * @see ParkingSpotDAO
+     */
     private static ParkingSpotDAO parkingSpotDAO = new ParkingSpotDAO();
 
+    /**
+     * @see TicketDAO
+     */
     private static TicketDAO ticketDAO = new TicketDAO();
 
-    static ParkingService parkingService =
+    /**
+     * @see ParkingService
+     */
+     static ParkingService parkingService =
             new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
     /**

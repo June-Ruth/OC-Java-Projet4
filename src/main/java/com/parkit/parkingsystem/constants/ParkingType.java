@@ -9,6 +9,8 @@ public enum ParkingType {
      * Bike.
      */
     BIKE,
-
+    /**
+     * For testing only. voir si vraiment bonne méthode //TODO.
+     */
     TEST
 }

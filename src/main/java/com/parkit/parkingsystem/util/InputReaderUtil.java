@@ -20,6 +20,10 @@ public class InputReaderUtil {
     private static final Logger LOGGER
             = LogManager.getLogger(InputReaderUtil.class);
 
+    /**
+     * Define Input origin at Scanner.
+     * @param scan Scanner
+     */
     public InputReaderUtil(final Scanner scan) {
         this.scan = scan;
     }

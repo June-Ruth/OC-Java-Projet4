@@ -19,7 +19,8 @@ public class ParkingService {
     /**
      * @see Logger
      */
-    private static final Logger logger = LoggerFactory.getLogger(ParkingService.class);
+    private static final Logger LOGGER =
+            LoggerFactory.getLogger(ParkingService.class);
 
     /**
      * @see FareCalculatorService
@@ -84,15 +85,15 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
-                logger.info("Generated Ticket and saved in DB");
-                logger.info(
+                LOGGER.info("Generated Ticket and saved in DB");
+                LOGGER.info(
                         "Please park your vehicle in spot number:"
                                 + parkingSpot.getId());
-                logger.info("Recorded in-time for vehicle number:"
+                LOGGER.info("Recorded in-time for vehicle number:"
                         + vehicleRegNumber + " is:" + inTime);
             }
         } catch (Exception e) {
-            logger.error("Unable to process incoming vehicle", e);
+            LOGGER.error("Unable to process incoming vehicle", e);
             throw e;
         }
     }
@@ -102,8 +103,8 @@ public class ParkingService {
      * @return vehicle registration number
      * @throws Exception if vehicle reg number doesn't exist
      */
-    private String getVehicleRegNumber() throws Exception {
-        logger.info("Please type the vehicle registration number "
+    private String getVehicleRegNumber() {
+        LOGGER.info("Please type the vehicle registration number "
                 + "and press enter key");
         return inputReaderUtil.readVehicleRegistrationNumber();
     }
@@ -125,7 +126,7 @@ public class ParkingService {
             Exception exception = new Exception("Error "
                     + "fetching parking number from DB."
                     + "Parking slots might be full");
-            logger.error("Error fetching next available parking slot",
+            LOGGER.error("Error fetching next available parking slot",
                     exception);
             throw exception;
         }
@@ -137,22 +138,17 @@ public class ParkingService {
      * @return vehicle type
      */
     private ParkingType getVehicleType() {
-        logger.info("Please select vehicle type from menu");
-        logger.info("1 CAR");
-        logger.info("2 BIKE");
+        LOGGER.info("Please select vehicle type from menu");
+        LOGGER.info("1 CAR");
+        LOGGER.info("2 BIKE");
         int input = inputReaderUtil.readSelection();
         switch (input) {
-            case 1: {
-                return ParkingType.CAR;
-            }
-            case 2: {
-                return ParkingType.BIKE;
-            }
-            default: {
-                logger.info("Incorrect input provided");
-                logger.error("Error parsing user input for type of vehicle");
+            case 1: return ParkingType.CAR;
+            case 2: return ParkingType.BIKE;
+            default:
+                LOGGER.info("Incorrect input provided");
+                LOGGER.error("Error parsing user input for type of vehicle");
                 throw new IllegalArgumentException("Entered input is invalid");
-            }
         }
     }
 
@@ -170,16 +166,16 @@ public class ParkingService {
                 ParkingSpot parkingSpot = ticket.getParkingSpot();
                 parkingSpot.setAvailable(true);
                 parkingSpotDAO.updateParking(parkingSpot);
-                logger.info("Please pay the parking fare:"
+                LOGGER.info("Please pay the parking fare:"
                         + ticket.getPrice());
-                logger.info("Recorded out-time for vehicle number:"
+                LOGGER.info("Recorded out-time for vehicle number:"
                         + ticket.getVehicleRegNumber() + " is:" + outTime);
             } else {
-                logger.info("Unable to update ticket information."
+                LOGGER.info("Unable to update ticket information."
                         + "Error occurred");
             }
         } catch (Exception e) {
-            logger.error("Unable to process exiting vehicle", e);
+            LOGGER.error("Unable to process exiting vehicle", e);
             throw e;
         }
     }

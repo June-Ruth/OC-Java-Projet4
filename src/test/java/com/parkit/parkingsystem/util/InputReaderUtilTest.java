@@ -1,6 +1,7 @@
 package com.parkit.parkingsystem.util;
 
 import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -57,9 +58,20 @@ public class InputReaderUtilTest {
 
     @Test
     public void readVehicleRegistrationNumberTestValid() {
-        final String vehicleRegNumber = "123 ABC 456";
+        final String vehicleRegNumber = "123ABC456";
         provideInput(vehicleRegNumber);
 
         assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
+    }
+
+    @Disabled
+    //TODO
+    @Test
+    public void readVehicleRegistrationNumberTestMoreThan10Char() {
+        final String vehicleRegNumber = "123 ABC 456";
+        provideInput(vehicleRegNumber);
+
+        //assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
+        //Throw exception
     }
 }

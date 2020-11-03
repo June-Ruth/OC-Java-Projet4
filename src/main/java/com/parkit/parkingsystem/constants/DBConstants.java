@@ -39,4 +39,10 @@ public class DBConstants {
                     + "p.TYPE from ticket t,parking p where p.parking_number "
                     + "= t.parking_number and"
                     + "t.VEHICLE_REG_NUMBER=? order by t.IN_TIME  limit 1";
+
+    /**
+     * Find ticket by Vehicle Registration Number.
+     */
+    public static final String FIND_TICKET_BY_VEHICLE_REG_NUMBER =
+            "select min(ID) from ticket where VEHICLE_REG_NUMBER=?";
 }

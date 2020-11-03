@@ -46,7 +46,7 @@ public class DataBaseConfig {
             mysqlDS.setUser(properties.getProperty("MYSQL_DB_USER"));
             mysqlDS.setPassword(properties.getProperty("MYSQL_DB_PASSWORD"));
         } catch (Exception e) {
-            LOGGER.error("error getting db properties", e);
+            LOGGER.error("Error while getting db properties", e);
         }
         return  mysqlDS;
     }
@@ -55,10 +55,15 @@ public class DataBaseConfig {
      * Manage DB connection.
      * @return DataBase Connection configuration
      */
-    public Connection getConnection() throws SQLException {
+    public Connection getConnection() {
         LOGGER.info("Create DB connection");
         DataSource ds = getMysqlDataSource();
-        Connection con = ds.getConnection();
+        Connection con = null;
+        try {
+            con = ds.getConnection();
+        } catch (SQLException e) {
+            LOGGER.error("Error while getting connection", e);
+        }
         return con;
     }
 

@@ -50,7 +50,7 @@ public class TicketDAOTest {
         when(con.prepareStatement(any(String.class))).thenReturn(ps);
         when(dataBaseConfig.getConnection()).thenReturn(con);
 
-        ticket = new Ticket();
+        /*ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));
         ticket.setOutTime(LocalDateTime.now());
         ticket.setVehicleRegNumber("ABC123DEF");
@@ -64,7 +64,7 @@ public class TicketDAOTest {
         when(rs.getDouble(3)).thenReturn(1.5);
         when(rs.getTimestamp(4)).thenReturn(Timestamp.valueOf(LocalDateTime.now().minusMinutes(60)));
         when(rs.getTimestamp(5)).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(rs.getString(6)).thenReturn("CAR");
+        when(rs.getString(6)).thenReturn("CAR");*/
         when(ps.executeQuery()).thenReturn(rs);
     }
 

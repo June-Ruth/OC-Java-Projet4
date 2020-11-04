@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoRule;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
@@ -59,13 +58,13 @@ public class TicketDAOTest {
         ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, true));
         ticket.setId(1);
 
-        /*when(rs.first()).thenReturn(true);
+        when(rs.first()).thenReturn(true);
         when(rs.getInt(1)).thenReturn(1);
         when(rs.getInt(2)).thenReturn(1);
         when(rs.getDouble(3)).thenReturn(1.5);
         when(rs.getTimestamp(4)).thenReturn(Timestamp.valueOf(LocalDateTime.now().minusMinutes(60)));
         when(rs.getTimestamp(5)).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(rs.getString(6)).thenReturn("CAR");*/
+        when(rs.getString(6)).thenReturn("CAR");
         when(ps.executeQuery()).thenReturn(rs);
     }
 
@@ -84,7 +83,6 @@ public class TicketDAOTest {
         //assertThat(dataBaseConfig.closeConnection(con))
     }
 
-    @Disabled
     @Test
     public void checkTicketByVehicleRegNumberTestTrue() throws SQLException {
         String vehicleRegNumber = "ABC123DEF";
@@ -94,13 +92,22 @@ public class TicketDAOTest {
         assertTrue(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
     }
 
-    @Disabled
     @Test
-    //TODO
-    public void checkTicketByVehicleRegNumberTestFalse(){
+    public void checkTicketByVehicleRegNumberTestFalse() throws SQLException {
         String vehicleRegNumber = "TEST FALSE";
         ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseConfig;
+        when(rs.next()).thenReturn(false);
         assertFalse(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+    }
+
+    @Test
+    public void checkTicketByVehicleRegNumberTestException() throws SQLException {
+        String vehicleRegNumber = " ";
+        ticketDAO = new TicketDAO();
+        ticketDAO.dataBaseConfig = dataBaseConfig;
+        when(rs.next()).thenThrow(SQLException.class);
+        assertThrows(SQLException.class, () -> ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
     }
 
 }

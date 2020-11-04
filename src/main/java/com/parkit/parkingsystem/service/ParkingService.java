@@ -155,7 +155,7 @@ public class ParkingService {
     /**
      * Process when vehicle exit.
      */
-    public void processExitingVehicle() throws Exception {
+    public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);

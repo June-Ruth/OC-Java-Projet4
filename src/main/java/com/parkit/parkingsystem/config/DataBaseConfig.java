@@ -42,9 +42,9 @@ public class DataBaseConfig {
             fis = new FileInputStream(new File(DB_PROPERTIES_URL.getFile()));
             properties.load(fis);
             mysqlDS = new MysqlDataSource();
-            mysqlDS.setURL(properties.getProperty("MYSQL_DB_URL"));
-            mysqlDS.setUser(properties.getProperty("MYSQL_DB_USER"));
-            mysqlDS.setPassword(properties.getProperty("MYSQL_DB_PASSWORD"));
+            mysqlDS.setURL(properties.getProperty("jdbc.url"));
+            mysqlDS.setUser(properties.getProperty("jdbc.user"));
+            mysqlDS.setPassword(properties.getProperty("jdbc.password"));
         } catch (Exception e) {
             LOGGER.error("Error while getting db properties", e);
         }

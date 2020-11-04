@@ -8,10 +8,7 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Timestamp;
+import java.sql.*;
 
 /**
  * Actions for tickets.
@@ -95,9 +92,7 @@ public class TicketDAO {
      * @return true if one ticket contains vehicle reg number
      */
     public boolean checkTicketByVehicleRegNumber(
-            final String vehicleRegNumber) {
-        // si contient un ticket avec vehicleRegNumber return True
-        // si ne contient pas de ticket avec vehicleRegNumber return false
+            final String vehicleRegNumber) throws SQLException {
         Connection con = null;
         boolean isRecurrent = false;
         try {
@@ -109,8 +104,9 @@ public class TicketDAO {
             isRecurrent = rs.next();
             dataBaseConfig.closeResultSet(rs);
             dataBaseConfig.closePreparedStatement(ps);
-        } catch (Exception ex) {
-            LOGGER.error("Error checking recurrence", ex);
+        } catch (SQLException e) {
+            LOGGER.error("Error checking recurrence", e);
+            throw e;
         } finally {
             dataBaseConfig.closeConnection(con);
         }

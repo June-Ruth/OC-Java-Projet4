@@ -25,8 +25,7 @@ public class ParkingService {
     /**
      * @see FareCalculatorService
      */
-    private static FareCalculatorService fareCalculatorService
-            = new FareCalculatorService();
+    FareCalculatorService fareCalculatorService;
 
     /**
      * @see InputReaderUtil
@@ -39,7 +38,7 @@ public class ParkingService {
     /**
      * @see TicketDAO
      */
-    private TicketDAO ticketDAO;
+    TicketDAO ticketDAO;
 
     /**
      * Constructor.
@@ -84,7 +83,7 @@ public class ParkingService {
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket);
+                ticketDAO.saveTicket(ticket); //pas de traitement en cas de pas save the ticket
                 LOGGER.info("Generated Ticket and saved in DB");
                 LOGGER.info(
                         "Please park your vehicle in spot number:"

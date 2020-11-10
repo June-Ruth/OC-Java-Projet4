@@ -22,7 +22,6 @@ public class FareCalculatorService {
      * Calculate fare.
      * If user stay less or equal to 30 min, price will be 0.
      * If vehicleRegNumber is already in DB, then price will be 5% reducing.
-     * //TODO
      * @param ticket from user
      */
     public void calculateFare(final Ticket ticket) throws SQLException {

@@ -1,113 +1,199 @@
 package com.parkit.parkingsystem.dao;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.h2.H2DatabaseMock;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import com.parkit.parkingsystem.test.TestAppender;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
 
-import javax.sql.DataSource;
-import java.sql.*;
 import java.time.LocalDateTime;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-@MockitoSettings(strictness = Strictness.LENIENT)
 public class TicketDAOTest {
 
-    @Mock
-    private DataSource ds;
-
-    @Mock
-    private Connection con;
-
-    @Mock
-    private DataBaseConfig dataBaseConfig;
-
-    @Mock
-    private PreparedStatement ps;
-
-    @Mock
-    private ResultSet rs;
+    private static H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
 
     private TicketDAO ticketDAO;
-    private Ticket ticket;
+    private static Ticket ticketInOutModel;
+    private static Ticket ticketInModel;
+    private static Logger logger = LogManager.getLogger(TicketDAO.class);
+    private  static TestAppender appender;
+
+    @BeforeAll
+    public static void setUpBeforeAll() {
+        appender = new TestAppender();
+        ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
+
+        ticketInOutModel = new Ticket();
+        ticketInOutModel.setId(1);
+        ticketInOutModel.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, true));
+        ticketInOutModel.setVehicleRegNumber("ABC123DEF");
+        ticketInOutModel.setPrice(1.5);
+        ticketInOutModel.setInTime(LocalDateTime.of(2020, 1, 1, 12, 0));
+        ticketInOutModel.setOutTime(LocalDateTime.of(2020, 1, 1, 13, 0));
+
+        ticketInModel = new Ticket();
+        ticketInModel.setId(2);
+        ticketInModel.setParkingSpot(new ParkingSpot(3, ParkingType.CAR, false));
+        ticketInModel.setVehicleRegNumber("ABC123DEF");
+        ticketInModel.setInTime(LocalDateTime.of(2020, 1, 2, 12, 0));
+    }
 
     @BeforeEach
-    public void setUp() throws Exception {
-
-        assertNotNull(ds);
-        when(con.prepareStatement(any(String.class))).thenReturn(ps);
-        when(dataBaseConfig.getConnection()).thenReturn(con);
-
-        /*ticket = new Ticket();
-        ticket.setInTime(LocalDateTime.now().minusMinutes(60));
-        ticket.setOutTime(LocalDateTime.now());
-        ticket.setVehicleRegNumber("ABC123DEF");
-        ticket.setPrice(1.5);
-        ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, true));
-        ticket.setId(1);
-
-        when(rs.first()).thenReturn(true);
-        when(rs.getInt(1)).thenReturn(1);
-        when(rs.getInt(2)).thenReturn(1);
-        when(rs.getDouble(3)).thenReturn(1.5);
-        when(rs.getTimestamp(4)).thenReturn(Timestamp.valueOf(LocalDateTime.now().minusMinutes(60)));
-        when(rs.getTimestamp(5)).thenReturn(Timestamp.valueOf(LocalDateTime.now()));
-        when(rs.getString(6)).thenReturn("CAR");*/
-        when(ps.executeQuery()).thenReturn(rs);
+    public void setUp() {
+        ticketDAO = new TicketDAO();
     }
 
-    @Disabled
-    @Test
-    public void saveTicketTestSuccess() {
-
-        //assertThat(dataBaseConfig.closeConnection(con))
-
-    }
-
-    @Disabled
-    @Test
-    public void saveTicketTestFail() {
-
-        //assertThat(dataBaseConfig.closeConnection(con))
+    @AfterEach
+    public void cleanUp() {
+        appender.reset();
     }
 
     @Test
-    public void checkTicketByVehicleRegNumberTestTrue() throws SQLException {
+    public void saveTicketTestSuccess() throws Exception {
+        Ticket newTicket = new Ticket();
+        //newTicket.setId(3);
+        newTicket.setParkingSpot(new ParkingSpot(2, ParkingType.CAR, true));
+        newTicket.setVehicleRegNumber("123NEW456");
+        newTicket.setInTime(LocalDateTime.of(2020, 2,3, 12, 0));
+        dbMock.use(
+                () -> {
+                    assertTrue(ticketDAO.saveTicket(newTicket));
+                    return null;
+                }
+        );
+    }
+
+    @Test
+    public void saveTicketTestFail() throws Exception {
+        Ticket newTicket = new Ticket();
+        newTicket.setParkingSpot(new ParkingSpot(2, ParkingType.CAR, true));
+        newTicket.setVehicleRegNumber(null);
+        newTicket.setInTime(LocalDateTime.of(2020, 2,3, 12, 0));
+        dbMock.use(
+                () -> {
+                    assertFalse(ticketDAO.saveTicket(newTicket));
+                    return null;
+                }
+        );
+    }
+
+    @Test
+    public void getTicketTestSuccess() throws Exception {
         String vehicleRegNumber = "ABC123DEF";
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseConfig;
-        when(rs.next()).thenReturn(true);
-        assertTrue(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+        dbMock.use(
+                () -> {
+                    assertEquals(ticketInModel, ticketDAO.getTicket(vehicleRegNumber));
+                    return null;
+                }
+        );
     }
 
     @Test
-    public void checkTicketByVehicleRegNumberTestFalse() throws SQLException {
-        String vehicleRegNumber = "TEST FALSE";
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseConfig;
-        when(rs.next()).thenReturn(false);
-        assertFalse(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+    //NB : pourrait ajouter un message d'erreur pour signaler à l'utilisateur que son numéro de véhicule n'est pas reconnu
+    public void getTicketTestWithNonExistingVehicleRegNumber() throws Exception {
+        String vehicleRegNumber = "GHI456JKL";
+        dbMock.use(
+                () -> {
+                    assertNull(ticketDAO.getTicket(vehicleRegNumber));
+                    return null;
+                }
+        );
+    }
+
+    @Disabled //TODO
+    @Test
+    public void getTicketTestException() throws Exception {
+        String vehicleRegNumber = "ABC 123 DEF";
+        dbMock.use(
+                () -> {
+                    ticketDAO.getTicket(vehicleRegNumber);
+                    assertEquals(1, appender.getLogCount());
+                    return null;
+                }
+        );
     }
 
     @Test
-    public void checkTicketByVehicleRegNumberTestException() throws SQLException {
+    public void checkTicketByVehicleRegNumberTestTrue() throws Exception {
+        String vehicleRegNumber = "ABC123DEF";
+        dbMock.use(
+                () -> {
+                    assertTrue(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+                    return null;
+                }
+        );
+    }
+
+    @Test
+    public void checkTicketByVehicleRegNumberTestFalse() throws Exception {
+        String vehicleRegNumber = "GHI456JKL";
+        dbMock.use(
+                () -> {
+                    assertFalse(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+                    return null;
+                }
+        );
+    }
+
+    @Disabled //TODO
+    @Test
+    public void checkTicketByVehicleRegNumberTestException() throws Exception {
         String vehicleRegNumber = " ";
-        ticketDAO = new TicketDAO();
-        ticketDAO.dataBaseConfig = dataBaseConfig;
-        when(rs.next()).thenThrow(SQLException.class);
-        assertThrows(SQLException.class, () -> ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
+        dbMock.use(
+                () -> {
+                    ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber);
+                    assertEquals(1, appender.getLogCount());
+                    return null;
+                }
+        );
+    }
+
+    @Test
+    public void updateTicketTestSuccess() throws Exception {
+        ticketInModel.setPrice(1.5);
+        ticketInModel.setOutTime(LocalDateTime.of(2020, 1, 1, 13, 0));
+        dbMock.use(
+                () -> {
+                    assertTrue(ticketDAO.updateTicket(ticketInModel));
+                    return null;
+                }
+        );
+    }
+
+    @Test
+    public void updateTicketTestFail() throws Exception {
+        Ticket newTicket = new Ticket();
+        newTicket.setOutTime(LocalDateTime.of(2020, 2, 1, 13, 0));
+        newTicket.setId(4543);
+        dbMock.use(
+                () -> {
+                    assertFalse(ticketDAO.updateTicket(newTicket));
+                    return null;
+                }
+        );
+    }
+
+    @Disabled //TODO
+    @Test
+    public void updateTicketTestException() throws Exception {
+        Ticket newTicket = new Ticket();
+        newTicket.setOutTime(LocalDateTime.of(2020, 2, 1, 13, 0));
+        newTicket.setId(-1);
+        dbMock.use(
+                () -> {
+                    ticketDAO.updateTicket(newTicket);
+                    assertEquals(1, appender.getLogCount());
+                    return null;
+                }
+        );
     }
 
 }

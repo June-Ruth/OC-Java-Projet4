@@ -22,8 +22,8 @@ public class DBConstants {
      * Save ticket.
      */
     public static final String SAVE_TICKET =
-            "insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, "
-                    + "PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)";
+            "insert into ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, "
+                    + "PRICE, IN_TIME, OUT_TIME) values (?,?,?,?,?)";
 
     /**
      * Update ticket.
@@ -40,7 +40,7 @@ public class DBConstants {
                     + "from ticket t,parking p "
                     + "where p.parking_number = t.parking_number and "
                     + "t.VEHICLE_REG_NUMBER=?"
-                    + "order by t.IN_TIME limit 1";
+                    + "order by t.IN_TIME DESC limit 1";
 
     /**
      * Find ticket by Vehicle Registration Number.
@@ -49,6 +49,6 @@ public class DBConstants {
             "select * "
                     + "from ticket "
                     + "where VEHICLE_REG_NUMBER=? and "
-                    + "OUT_TIME IS NOT NULL"
+                    + "OUT_TIME IS NOT NULL "
                     + "limit 1";
 }

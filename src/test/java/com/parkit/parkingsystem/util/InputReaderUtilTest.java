@@ -72,6 +72,6 @@ public class InputReaderUtilTest {
         provideInput(vehicleRegNumber);
 
         //assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
-        //Throw exception
+        //Throw exception varchar > 10 ne devrait pas pouvoir passer
     }
 }

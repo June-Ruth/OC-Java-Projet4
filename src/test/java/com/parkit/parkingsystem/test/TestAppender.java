@@ -1,5 +1,6 @@
 package com.parkit.parkingsystem.test;
 
+import org.apache.logging.log4j.Level;
 import org.apache.logging.log4j.core.Appender;
 import org.apache.logging.log4j.core.ErrorHandler;
 import org.apache.logging.log4j.core.Layout;
@@ -79,5 +80,10 @@ public class TestAppender implements Appender {
 
     public int getLogCount() {
         return logEventList.size();
+    }
+
+    public Level getLastLogLevel() {
+        int size = logEventList.size();
+        return logEventList.get(size - 1).getLevel();
     }
 }

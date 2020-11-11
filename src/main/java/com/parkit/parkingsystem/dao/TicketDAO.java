@@ -8,7 +8,12 @@ import com.parkit.parkingsystem.model.Ticket;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 
 /**
  * Actions for tickets.
@@ -27,7 +32,8 @@ public class TicketDAO {
      */
     public boolean saveTicket(final Ticket ticket) {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.SAVE_TICKET)) {
+             PreparedStatement ps = con.prepareStatement(
+                     DBConstants.SAVE_TICKET)) {
             ps.setInt(1, ticket.getParkingSpot().getId());
             ps.setString(2, ticket.getVehicleRegNumber());
             ps.setNull(3, Types.DOUBLE);
@@ -50,7 +56,8 @@ public class TicketDAO {
     public Ticket getTicket(final String vehicleRegNumber) {
         Ticket ticket = null;
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.GET_TICKET)) {
+             PreparedStatement ps =
+                     con.prepareStatement(DBConstants.GET_TICKET)) {
             ps.setString(1, vehicleRegNumber);
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
@@ -63,7 +70,8 @@ public class TicketDAO {
                     ticket.setPrice(rs.getDouble(3));
                     ticket.setInTime(rs.getTimestamp(4).toLocalDateTime());
                     Timestamp timestamp = rs.getTimestamp(5);
-                    ticket.setOutTime(timestamp != null ? timestamp.toLocalDateTime() : null);
+                    ticket.setOutTime(timestamp != null
+                            ? timestamp.toLocalDateTime() : null);
                 }
             }
         } catch (Exception ex) {
@@ -81,7 +89,8 @@ public class TicketDAO {
             final String vehicleRegNumber) throws SQLException {
         boolean isRecurrent = false;
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.FIND_TICKET_BY_VEHICLE_REG_NUMBER)) {
+             PreparedStatement ps = con.prepareStatement(
+                     DBConstants.FIND_TICKET_BY_VEHICLE_REG_NUMBER)) {
             ps.setString(1, vehicleRegNumber);
             try (ResultSet rs = ps.executeQuery()) {
                 isRecurrent = rs.next();
@@ -99,7 +108,8 @@ public class TicketDAO {
      */
     public boolean updateTicket(final Ticket ticket) {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_TICKET)) {
+             PreparedStatement ps = con.prepareStatement(
+                     DBConstants.UPDATE_TICKET)) {
             ps.setDouble(1, ticket.getPrice());
             ps.setTimestamp(2, Timestamp.valueOf(ticket.getOutTime()));
             ps.setInt(3, ticket.getId());

@@ -7,7 +7,6 @@ import org.mockito.MockedStatic;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.sql.Connection;
 import java.util.concurrent.Callable;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -39,9 +38,5 @@ public class H2DatabaseMock {
             }
             test.call();
         }
-    }
-
-    public Connection getConnection() {
-        return DataBaseManager.INSTANCE.getConnection();
     }
 }

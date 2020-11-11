@@ -16,7 +16,7 @@ public class FareCalculatorService {
     /**
      * @see TicketDAO
      */
-    TicketDAO ticketDAO;
+    TicketDAO ticketDAO = new TicketDAO();
 
     /**
      * Calculate fare.
@@ -42,15 +42,18 @@ public class FareCalculatorService {
             ticket.setPrice(0);
         } else {
             switch (parkingType) {
+                //TODO : peut utiliser une variable taux afin d'alléger le code.
                 case CAR:
-                    final double priceCar = ticketDAO.checkTicketByVehicleRegNumber(
+                    final double priceCar =
+                            ticketDAO.checkTicketByVehicleRegNumber(
                             ticket.getVehicleRegNumber())
                                     ? (duration * 0.95 * Fare.CAR_RATE_PER_HOUR)
                                     : (duration * Fare.CAR_RATE_PER_HOUR);
                     ticket.setPrice(priceCar);
                     break;
                 case BIKE:
-                    final double priceBike = ticketDAO.checkTicketByVehicleRegNumber(
+                    final double priceBike =
+                            ticketDAO.checkTicketByVehicleRegNumber(
                             ticket.getVehicleRegNumber())
                             ? (duration * 0.95 * Fare.BIKE_RATE_PER_HOUR)
                             : (duration * Fare.BIKE_RATE_PER_HOUR);

@@ -20,7 +20,8 @@ public class ParkingSpotDAO {
     /**
      * @see Logger
      */
-    private static final Logger LOGGER = LogManager.getLogger(ParkingSpotDAO.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ParkingSpotDAO.class);
 
     /**
      * Get the next available spot to park.
@@ -51,7 +52,8 @@ public class ParkingSpotDAO {
      */
     public boolean updateParking(final ParkingSpot parkingSpot) {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)) {
+             PreparedStatement ps = con.prepareStatement(
+                     DBConstants.UPDATE_PARKING_SPOT)) {
 
             ps.setBoolean(1, parkingSpot.isAvailable());
             ps.setInt(2, parkingSpot.getId());

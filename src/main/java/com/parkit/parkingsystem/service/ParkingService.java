@@ -25,7 +25,7 @@ public class ParkingService {
     /**
      * @see FareCalculatorService
      */
-    FareCalculatorService fareCalculatorService;
+    FareCalculatorService fareCalculatorService = new FareCalculatorService();
 
     /**
      * @see InputReaderUtil
@@ -58,6 +58,7 @@ public class ParkingService {
      * Process when vehicle enter.
      */
     public void processIncomingVehicle() throws Exception {
+        //TODO : si utilisateur récurrent, afficher un message d'accueil.
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 
@@ -73,17 +74,14 @@ public class ParkingService {
                 LocalDateTime inTime = LocalDateTime.now();
 
                 Ticket ticket = new Ticket();
-                /*
-                ID, PARKING_NUMBER, VEHICLE_REG_NUMBER,
-                PRICE, IN_TIME, OUT_TIME)
-                ticket.setId(ticketID);
-                */
+
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket); //pas de traitement en cas de pas save the ticket
+                ticketDAO.saveTicket(ticket);
+                // TODO : pas de traitement en cas de pas save the ticket
                 LOGGER.info("Generated Ticket and saved in DB");
                 LOGGER.info(
                         "Please park your vehicle in spot number:"

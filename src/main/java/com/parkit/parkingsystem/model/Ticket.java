@@ -127,14 +127,23 @@ public class Ticket {
         this.outTime = outTime;
     }
 
+    /**
+     * Check Equality by ID.
+     * @param o Ticket.
+     * @return boolean true if equal.
+     */
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(final Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Ticket ticket = (Ticket) o;
         return id == ticket.id;
     }
 
+    /**
+     * Hash by Id to allow comparaison of Ticket.
+     * @return int hash of ID.
+     */
     @Override
     public int hashCode() {
         return  Objects.hash(id);

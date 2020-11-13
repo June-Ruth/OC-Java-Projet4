@@ -42,6 +42,19 @@ public class InteractiveShell {
             new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
     /**
+     * Constant one.
+     */
+    private static final byte ONE = 1;
+    /**
+     * Constant two.
+     */
+    private static final byte TWO = 2;
+    /**
+     * Constant three.
+     */
+    private static final byte THREE = 3;
+
+    /**
      * Load Interface depending on option.
      */
     public static void loadInterface() throws Exception {
@@ -53,15 +66,15 @@ public class InteractiveShell {
             loadMenu();
             int option = inputReaderUtil.readSelection();
             switch (option) {
-                case 1:
+                case ONE:
                     parkingService.processIncomingVehicle();
                     continueApp = false;
                     break;
-                case 2:
+                case TWO:
                     parkingService.processExitingVehicle();
                     continueApp = false;
                     break;
-                case 3:
+                case THREE:
                     LOGGER.info("Exiting from the system!");
                     continueApp = false;
                     break;

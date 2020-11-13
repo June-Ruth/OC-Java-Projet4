@@ -93,18 +93,6 @@ public class ParkingSpotDAOTest {
                 }
         );
     }
-
-    @Disabled //TODO
-    @Test
-    public void updateParkingTestUnupdate() throws Exception {
-        dbMock.use(
-                () -> {
-                    //Générer une exception SQL dans l'Update.
-                    assertFalse(parkingSpotDAO.updateParking(parkingSpot));
-                    return null;
-                }
-        );
-    }
 }
 
 

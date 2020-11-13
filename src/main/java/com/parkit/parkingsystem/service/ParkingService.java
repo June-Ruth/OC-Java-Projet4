@@ -42,16 +42,16 @@ public class ParkingService {
 
     /**
      * Constructor.
-     * @param inputReaderUtil user selection
-     * @param parkingSpotDAO model parking spot
-     * @param ticketDAO model ticket
+     * @param pInputReaderUtil user selection
+     * @param pParkingSpotDAO model parking spot
+     * @param pTicketDAO model ticket
      */
-    public ParkingService(final InputReaderUtil inputReaderUtil,
-                          final ParkingSpotDAO parkingSpotDAO,
-                          final TicketDAO ticketDAO) {
-        this.inputReaderUtil = inputReaderUtil;
-        this.parkingSpotDAO = parkingSpotDAO;
-        this.ticketDAO = ticketDAO;
+    public ParkingService(final InputReaderUtil pInputReaderUtil,
+                          final ParkingSpotDAO pParkingSpotDAO,
+                          final TicketDAO pTicketDAO) {
+        this.inputReaderUtil = pInputReaderUtil;
+        this.parkingSpotDAO = pParkingSpotDAO;
+        this.ticketDAO = pTicketDAO;
     }
 
     /**
@@ -81,7 +81,6 @@ public class ParkingService {
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
                 ticketDAO.saveTicket(ticket);
-                // TODO : pas de traitement en cas de pas save the ticket
                 LOGGER.info("Generated Ticket and saved in DB");
                 LOGGER.info(
                         "Please park your vehicle in spot number:"

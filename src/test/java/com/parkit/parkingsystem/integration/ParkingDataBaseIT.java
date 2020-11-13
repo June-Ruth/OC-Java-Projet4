@@ -71,7 +71,6 @@ public class ParkingDataBaseIT {
     public void testIncomingCarWithNonRecurrentUserIT() throws Exception {
         dbMock.use(
                 () -> {
-
                     when(inputReaderUtil.readSelection()).thenReturn(1);
                     when(inputReaderUtil.readVehicleRegistrationNumber()).thenReturn(vehicleRegNumber);
                     parkingService.processIncomingVehicle();

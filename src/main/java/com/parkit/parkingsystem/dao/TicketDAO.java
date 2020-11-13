@@ -26,6 +26,31 @@ public class TicketDAO {
     private static final Logger LOGGER = LogManager.getLogger(TicketDAO.class);
 
     /**
+     * Constant one.
+     */
+    private static final byte ONE = 1;
+    /**
+     * Constant two.
+     */
+    private static final byte TWO = 2;
+    /**
+     * Constant three.
+     */
+    private static final byte THREE = 3;
+    /**
+     * Constant four.
+     */
+    private static final byte FOUR = 4;
+    /**
+     * Constant five.
+     */
+    private static final byte FIVE = 5;
+    /**
+     * Constant six.
+     */
+    private static final byte SIX = 6;
+
+    /**
      * Save ticket.
      * @param ticket user ticket
      * @return false
@@ -34,12 +59,12 @@ public class TicketDAO {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
              PreparedStatement ps = con.prepareStatement(
                      DBConstants.SAVE_TICKET)) {
-            ps.setInt(1, ticket.getParkingSpot().getId());
-            ps.setString(2, ticket.getVehicleRegNumber());
-            ps.setNull(3, Types.DOUBLE);
-            ps.setTimestamp(4,
+            ps.setInt(ONE, ticket.getParkingSpot().getId());
+            ps.setString(TWO, ticket.getVehicleRegNumber());
+            ps.setNull(THREE, Types.DOUBLE);
+            ps.setTimestamp(FOUR,
                     Timestamp.valueOf(ticket.getInTime()));
-            ps.setNull(5, Types.TIMESTAMP);
+            ps.setNull(FIVE, Types.TIMESTAMP);
             int updateRowCount = ps.executeUpdate();
             return (updateRowCount == 1);
         } catch (SQLException ex) {
@@ -62,14 +87,14 @@ public class TicketDAO {
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
                     ticket = new Ticket();
-                    ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(1),
-                            ParkingType.valueOf(rs.getString(6)), false);
+                    ParkingSpot parkingSpot = new ParkingSpot(rs.getInt(ONE),
+                            ParkingType.valueOf(rs.getString(SIX)), false);
                     ticket.setParkingSpot(parkingSpot);
-                    ticket.setId(rs.getInt(2));
+                    ticket.setId(rs.getInt(TWO));
                     ticket.setVehicleRegNumber(vehicleRegNumber);
-                    ticket.setPrice(rs.getDouble(3));
-                    ticket.setInTime(rs.getTimestamp(4).toLocalDateTime());
-                    Timestamp timestamp = rs.getTimestamp(5);
+                    ticket.setPrice(rs.getDouble(THREE));
+                    ticket.setInTime(rs.getTimestamp(FOUR).toLocalDateTime());
+                    Timestamp timestamp = rs.getTimestamp(FIVE);
                     ticket.setOutTime(timestamp != null
                             ? timestamp.toLocalDateTime() : null);
                 }
@@ -86,12 +111,12 @@ public class TicketDAO {
      * @return true if one ticket contains vehicle reg number
      */
     public boolean checkTicketByVehicleRegNumber(
-            final String vehicleRegNumber) throws SQLException {
+            final String vehicleRegNumber) {
         boolean isRecurrent = false;
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
              PreparedStatement ps = con.prepareStatement(
                      DBConstants.FIND_TICKET_BY_VEHICLE_REG_NUMBER)) {
-            ps.setString(1, vehicleRegNumber);
+            ps.setString(ONE, vehicleRegNumber);
             try (ResultSet rs = ps.executeQuery()) {
                 isRecurrent = rs.next();
             }
@@ -110,9 +135,9 @@ public class TicketDAO {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
              PreparedStatement ps = con.prepareStatement(
                      DBConstants.UPDATE_TICKET)) {
-            ps.setDouble(1, ticket.getPrice());
-            ps.setTimestamp(2, Timestamp.valueOf(ticket.getOutTime()));
-            ps.setInt(3, ticket.getId());
+            ps.setDouble(ONE, ticket.getPrice());
+            ps.setTimestamp(TWO, Timestamp.valueOf(ticket.getOutTime()));
+            ps.setInt(THREE, ticket.getId());
             int updateRowCount = ps.executeUpdate();
             return (updateRowCount == 1);
         } catch (SQLException ex) {

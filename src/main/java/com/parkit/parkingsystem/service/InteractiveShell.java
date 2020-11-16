@@ -20,10 +20,15 @@ public class InteractiveShell {
             LoggerFactory.getLogger(InteractiveShell.class);
 
     /**
+     * @see Scanner
+     */
+    private static Scanner scan = new Scanner(System.in);
+
+    /**
      * Define Input origin.
      */
     static InputReaderUtil inputReaderUtil =
-            new InputReaderUtil(new Scanner(System.in));
+            new InputReaderUtil(scan);
 
     /**
      * @see ParkingSpotDAO

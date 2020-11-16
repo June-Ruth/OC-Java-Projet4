@@ -145,7 +145,7 @@ public class Ticket {
     }
 
     /**
-     * Hash by Id to allow comparaison of Ticket.
+     * Hash by Id to allow compare of Ticket.
      * @return int hash of ID.
      */
     @Override

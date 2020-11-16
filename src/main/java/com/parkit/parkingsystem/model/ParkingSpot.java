@@ -49,14 +49,6 @@ public class ParkingSpot {
     }
 
     /**
-     * Setter parking type.
-     * @param pParkingType bike, car...
-     */
-    public void setParkingType(final ParkingType pParkingType) {
-        parkingType = pParkingType;
-    }
-
-    /**
      * Getter availability.
      * @return availability.
      */

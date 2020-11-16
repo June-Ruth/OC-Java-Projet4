@@ -60,24 +60,8 @@ public final class InteractiveShell {
      */
     private static final byte THREE = 3;
 
-    /**
-     * get InputReaderUtil.
-     * @return inputReaderUtil
-     */
-    static InputReaderUtil getInputReaderUtil() {
-        return inputReaderUtil;
-    }
-
     static void setInputReaderUtil(final InputReaderUtil pInputReaderUtil) {
         inputReaderUtil = pInputReaderUtil;
-    }
-
-    /**
-     * get Parking service.
-     * @return parkingService
-     */
-    static ParkingService getParkingService() {
-        return parkingService;
     }
 
     static void setParkingService(final ParkingService pParkingService) {

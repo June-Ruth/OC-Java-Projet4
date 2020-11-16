@@ -53,29 +53,8 @@ public class ParkingService {
         ticketDAO = pTicketDAO;
     }
     /**
-     * get access to TicketDAO.
-     * @return ticketDAO
-     */
-    TicketDAO getTicketDAO() {
-        return ticketDAO;
-    }
-    /**
-     * set access to ticketDAO.
-     * @param pTicketDAO ticket DAO
-     */
-    void setTicketDAO(final TicketDAO pTicketDAO) {
-        ticketDAO = pTicketDAO;
-    }
-    /**
-     * getFareCalculatorService.
-     * @return fareCalculatorService
-     */
-    FareCalculatorService getFareCalculatorService() {
-        return fareCalculatorService;
-    }
-    /**
      * set FareCalculatorService.
-     * @param pFareCalculatorService farecalculatorservice
+     * @param pFareCalculatorService FareCalculatorService
      */
     void setFareCalculatorService(final FareCalculatorService
                                           pFareCalculatorService) {
@@ -176,7 +155,7 @@ public class ParkingService {
     /**
      * Process when vehicle exit.
      */
-    public void processExitingVehicle() throws Exception {
+    public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);

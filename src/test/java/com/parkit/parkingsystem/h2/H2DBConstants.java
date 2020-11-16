@@ -11,6 +11,9 @@ public class H2DBConstants {
     static final String SET_AVAILABLE_TRUE =
             "update parking set available = true";
 
+    public static final String SET_AVAILABLE_FALSE =
+            "update parking set available = false";
+
     static final String CLEAR_TICKET_TABLE =
             "truncate table ticket";
 
@@ -24,7 +27,4 @@ public class H2DBConstants {
     static final String CHECK_AVAILABILITY_SAVE =
             "select p.AVAILABLE from parking p " +
                     "where p.PARKING_NUMBER = ?";
-
-    static final String CHECK_FARE =
-            "select t.PRICE from ticket t ";
 }

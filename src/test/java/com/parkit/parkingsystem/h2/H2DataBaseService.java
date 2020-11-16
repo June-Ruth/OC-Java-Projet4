@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 
 public class H2DataBaseService {
 
-    H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
-
     public Connection getConnection() {
         return DataBaseManager.INSTANCE.getConnection();
     }
@@ -18,8 +16,8 @@ public class H2DataBaseService {
         try (Connection con = getConnection();
              PreparedStatement ps1 = con.prepareStatement(H2DBConstants.INSERT_IN_OUT_TICKET);
              PreparedStatement ps2 = con.prepareStatement(H2DBConstants.INSERT_IN_TICKET);
-             PreparedStatement ps3 = con.prepareStatement(H2DBConstants.SET_PARKING_3_FALSE);) {
-            ps2.setTimestamp(1, Timestamp.valueOf(LocalDateTime.of(2020, 01, 02, 12, 00)));
+             PreparedStatement ps3 = con.prepareStatement(H2DBConstants.SET_PARKING_3_FALSE)) {
+            ps2.setTimestamp(1, Timestamp.valueOf(LocalDateTime.of(2020, 1, 2, 12, 0)));
             ps1.execute();
             ps2.execute();
             ps3.execute();
@@ -63,7 +61,7 @@ public class H2DataBaseService {
     public boolean checkTicketInModelSave(String vehicleRegNumber) {
         boolean result = false;
         try (Connection con = getConnection();
-             PreparedStatement ps = con.prepareStatement(H2DBConstants.CHECK_TICKET_IN_SAVE);) {
+             PreparedStatement ps = con.prepareStatement(H2DBConstants.CHECK_TICKET_IN_SAVE)) {
             ps.setString(1, vehicleRegNumber);
             try (ResultSet rs = ps.executeQuery()) {
                 result = rs.next();

@@ -1,39 +1,20 @@
 package com.parkit.parkingsystem.dao;
 
-import com.parkit.parkingsystem.config.DataBaseManager;
-import com.parkit.parkingsystem.config.DataSourceFactory;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.h2.H2DBConstants;
 import com.parkit.parkingsystem.h2.H2DataBaseService;
 import com.parkit.parkingsystem.h2.H2DatabaseMock;
 import com.parkit.parkingsystem.model.ParkingSpot;
-import com.parkit.parkingsystem.test.TestAppender;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.h2.jdbcx.JdbcDataSource;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.MockedStatic;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.mockito.junit.jupiter.MockitoSettings;
-import org.mockito.quality.Strictness;
-
-
-import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.concurrent.Callable;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.mockStatic;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingSpotDAOTest {
+class ParkingSpotDAOTest {
 
     private static ParkingSpotDAO parkingSpotDAO;
     private ParkingSpot parkingSpot;
@@ -41,15 +22,15 @@ public class ParkingSpotDAOTest {
     private static H2DataBaseService dbService = new H2DataBaseService();
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         parkingSpotDAO = new ParkingSpotDAO();
     }
 
     @AfterEach
-    public void afterEach() { dbService.clearDBTest(); }
+    void afterEach() { dbService.clearDBTest(); }
 
     @Test
-    public void getNextAvailableSlotForBikeSuccess() throws Exception {
+    void getNextAvailableSlotForBikeSuccess() throws Exception {
         dbMock.use(
                 () -> {
                     assertEquals(4, parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE));
@@ -59,7 +40,7 @@ public class ParkingSpotDAOTest {
     }
 
     @Test
-    public void getNextAvailableSlotForCarSuccess() throws Exception {
+    void getNextAvailableSlotForCarSuccess() throws Exception {
         dbMock.use(
                 () -> {
                     assertEquals(1, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
@@ -69,12 +50,11 @@ public class ParkingSpotDAOTest {
     }
 
     @Test
-    public void getNextAvailableSlotForCarFail() throws Exception {
+    void getNextAvailableSlotForCarFail() throws Exception {
         dbMock.use(
                 () -> {
-                    final String SET_AVAILABLE_FALSE = "update parking set available = false";
                     try (Connection con = dbService.getConnection();
-                    PreparedStatement ps = con.prepareStatement(SET_AVAILABLE_FALSE)) {
+                    PreparedStatement ps = con.prepareStatement(H2DBConstants.SET_AVAILABLE_FALSE)) {
                         ps.executeUpdate();
                         assertEquals(0, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
                         return null;
@@ -84,7 +64,7 @@ public class ParkingSpotDAOTest {
     }
 
     @Test
-    public void updateParkingTestUpdate() throws Exception {
+    void updateParkingTestUpdate() throws Exception {
         parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
         dbMock.use(
                 () -> {

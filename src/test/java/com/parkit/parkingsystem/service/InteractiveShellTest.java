@@ -15,11 +15,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InteractiveShellTest {
+class InteractiveShellTest {
 
     private  static TestAppender appender;
-
-    private static InteractiveShell interactiveShell;
 
     @Mock
     private static ParkingService parkingService;
@@ -30,24 +28,24 @@ public class InteractiveShellTest {
     private static Logger logger = LogManager.getLogger(InteractiveShell.class);
 
     @BeforeAll
-    public static void setUpBeforeAll() {
+    static void setUpBeforeAll() {
         appender = new TestAppender();
         ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
     }
 
     @BeforeEach
-    public void setUpBeforeEach() {
+    void setUpBeforeEach() {
         InteractiveShell.setInputReaderUtil(inputReaderUtil);
         InteractiveShell.setParkingService(parkingService);
     }
 
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         appender.reset();
     }
 
     @Test
-    public void loadInterfaceTestWhenProcessIncomingVehicle() throws Exception {
+    void loadInterfaceTestWhenProcessIncomingVehicle() throws Exception {
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
 
@@ -58,7 +56,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTestWhenProcessExitingVehicle() throws Exception {
+    void loadInterfaceTestWhenProcessExitingVehicle() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(2);
 
         doNothing().when(parkingService).processExitingVehicle();
@@ -68,7 +66,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTestWhenExitInterface() throws Exception {
+    void loadInterfaceTestWhenExitInterface() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(3);
 
         InteractiveShell.loadInterface();
@@ -76,7 +74,7 @@ public class InteractiveShellTest {
     }
 
     @Test
-    public void loadInterfaceTestDefault() throws Exception {
+    void loadInterfaceTestDefault() throws Exception {
         when(inputReaderUtil.readSelection()).thenReturn(5).thenReturn(1);
 
         doNothing().when(parkingService).processIncomingVehicle();

@@ -12,40 +12,42 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import static com.parkit.parkingsystem.constants.ParkingType.TEST;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
-import java.sql.SQLException;
 import java.time.LocalDateTime;
 
 @ExtendWith(MockitoExtension.class)
-public class FareCalculatorServiceTest {
+class FareCalculatorServiceTest {
 
     private static FareCalculatorService fareCalculatorService;
     private Ticket ticket;
+
+    private LocalDateTime outTime;
+    private LocalDateTime inTime;
+    private ParkingSpot parkingSpot;
+    private String vehicleRegNumber = "ABC123DEF";
 
     @Mock
     private static TicketDAO ticketDAO;
 
     @BeforeAll
-    private static void setUp() {
+    static void setUp() {
         fareCalculatorService = new FareCalculatorService();
     }
 
     @BeforeEach
-    private void setUpPerTest() {
+    void setUpPerTest() {
         ticket = new Ticket();
         fareCalculatorService.setTicketDAO(ticketDAO);
     }
 
     @Test
-    public void calculateFareTestCar() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestCar() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -60,11 +62,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestBike() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestBike() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -79,10 +80,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestBikeWithFutureInTime() {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.plusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+    void calculateFareTestBikeWithFutureInTime() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.plusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -92,9 +93,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestBikeWithNullOutTime() {
-        LocalDateTime inTime = LocalDateTime.now().plusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
+    void calculateFareTestBikeWithNullOutTime() {
+        outTime = null;
+        inTime = LocalDateTime.now().plusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(null);
@@ -104,11 +106,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestBikeWithLessThanOneHourParkingTime() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(45);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestBikeWithLessThanOneHourParkingTime() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(45);
+        parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -123,11 +124,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestCarWithLessThanOneHourParkingTime() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(45);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestCarWithLessThanOneHourParkingTime() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(45);
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -142,11 +142,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestCarWithMoreThanADayParkingTime() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(24*60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestCarWithMoreThanADayParkingTime() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(24*60);
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -161,11 +160,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestForLessThan30min() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(15);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestForLessThan30min() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(15);
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -178,11 +176,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestForRecurrentUserCar() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestForRecurrentUserCar() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);
@@ -197,11 +194,10 @@ public class FareCalculatorServiceTest {
     }
 
     @Test
-    public void calculateFareTestForRecurrentUserBike() throws SQLException {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
-        String vehicleRegNumber = "ABC123DEF";
+    void calculateFareTestForRecurrentUserBike() {
+        outTime = LocalDateTime.now();
+        inTime = outTime.minusMinutes(60);
+        parkingSpot = new ParkingSpot(1, ParkingType.BIKE,false);
 
         ticket.setInTime(inTime);
         ticket.setOutTime(outTime);

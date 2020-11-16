@@ -48,7 +48,7 @@ public class ParkingServiceTest {
     @BeforeEach
     public void setUpBeforeEach() {
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
-        parkingService.fareCalculatorService = fareCalculatorService;
+        parkingService.setFareCalculatorService(fareCalculatorService);
     }
 
     @AfterEach

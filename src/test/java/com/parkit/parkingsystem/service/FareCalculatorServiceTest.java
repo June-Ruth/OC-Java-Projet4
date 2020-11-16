@@ -37,7 +37,7 @@ public class FareCalculatorServiceTest {
     @BeforeEach
     private void setUpPerTest() {
         ticket = new Ticket();
-        fareCalculatorService.ticketDAO = ticketDAO;
+        fareCalculatorService.setTicketDAO(ticketDAO);
     }
 
     @Test

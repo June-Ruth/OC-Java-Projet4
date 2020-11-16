@@ -7,7 +7,8 @@ import org.apache.logging.log4j.Logger;
 /**
  * Start App.
  */
-public class App {
+public final class App {
+    private App() { }
     /**
      * @see Logger
      */

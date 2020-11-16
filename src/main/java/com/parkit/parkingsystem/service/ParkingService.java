@@ -25,8 +25,8 @@ public class ParkingService {
     /**
      * @see FareCalculatorService
      */
-    FareCalculatorService fareCalculatorService = new FareCalculatorService();
-
+    private FareCalculatorService fareCalculatorService =
+            new FareCalculatorService();
     /**
      * @see InputReaderUtil
      */
@@ -38,8 +38,7 @@ public class ParkingService {
     /**
      * @see TicketDAO
      */
-    TicketDAO ticketDAO;
-
+    private TicketDAO ticketDAO;
     /**
      * Constructor.
      * @param pInputReaderUtil user selection
@@ -52,6 +51,35 @@ public class ParkingService {
         this.inputReaderUtil = pInputReaderUtil;
         this.parkingSpotDAO = pParkingSpotDAO;
         this.ticketDAO = pTicketDAO;
+    }
+    /**
+     * get access to TicketDAO.
+     * @return ticketDAO
+     */
+    TicketDAO getTicketDAO() {
+        return ticketDAO;
+    }
+    /**
+     * set access to ticketDAO.
+     * @param pTicketDAO ticket DAO
+     */
+    void setTicketDAO(final TicketDAO pTicketDAO) {
+        this.ticketDAO = pTicketDAO;
+    }
+    /**
+     * getFareCalculatorService.
+     * @return fareCalculatorService
+     */
+    FareCalculatorService getFareCalculatorService() {
+        return fareCalculatorService;
+    }
+    /**
+     * set FareCalculatorService.
+     * @param pFareCalculatorService farecalculatorservice
+     */
+    void setFareCalculatorService(final FareCalculatorService
+                                          pFareCalculatorService) {
+        this.fareCalculatorService = pFareCalculatorService;
     }
 
     /**

@@ -19,6 +19,8 @@ public class InteractiveShellTest {
 
     private  static TestAppender appender;
 
+    private static InteractiveShell interactiveShell;
+
     @Mock
     private static ParkingService parkingService;
 
@@ -35,8 +37,8 @@ public class InteractiveShellTest {
 
     @BeforeEach
     public void setUpBeforeEach() {
-        InteractiveShell.inputReaderUtil = inputReaderUtil;
-        InteractiveShell.parkingService = parkingService;
+        InteractiveShell.setInputReaderUtil(inputReaderUtil);
+        InteractiveShell.setParkingService(parkingService);
     }
 
     @AfterEach

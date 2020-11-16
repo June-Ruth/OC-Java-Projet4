@@ -11,7 +11,8 @@ import java.util.Scanner;
 /**
  * Interactive Shell with options.
  */
-public class InteractiveShell {
+public final class InteractiveShell {
+    private InteractiveShell() { }
 
     /**
      * @see Logger
@@ -27,7 +28,7 @@ public class InteractiveShell {
     /**
      * Define Input origin.
      */
-    static InputReaderUtil inputReaderUtil =
+    private static InputReaderUtil inputReaderUtil =
             new InputReaderUtil(scan);
 
     /**
@@ -43,7 +44,7 @@ public class InteractiveShell {
     /**
      * @see ParkingService
      */
-     static ParkingService parkingService =
+    private static ParkingService parkingService =
             new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
 
     /**
@@ -58,6 +59,30 @@ public class InteractiveShell {
      * Constant three.
      */
     private static final byte THREE = 3;
+
+    /**
+     * get InputReaderUtil.
+     * @return inputReaderUtil
+     */
+    static InputReaderUtil getInputReaderUtil() {
+        return inputReaderUtil;
+    }
+
+    static void setInputReaderUtil(final InputReaderUtil pInputReaderUtil) {
+        inputReaderUtil = pInputReaderUtil;
+    }
+
+    /**
+     * get Parking service.
+     * @return parkingService
+     */
+    static ParkingService getParkingService() {
+        return parkingService;
+    }
+
+    static void setParkingService(final ParkingService pParkingService) {
+        parkingService = pParkingService;
+    }
 
     /**
      * Load Interface depending on option.

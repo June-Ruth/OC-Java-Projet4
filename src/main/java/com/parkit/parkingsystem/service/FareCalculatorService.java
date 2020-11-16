@@ -16,7 +16,24 @@ public class FareCalculatorService {
     /**
      * @see TicketDAO
      */
-    TicketDAO ticketDAO = new TicketDAO();
+    private TicketDAO ticketDAO = new TicketDAO();
+
+    /**
+     * get access to TicketDAO.
+     * @return ticketDAO
+     */
+    TicketDAO getTicketDAO() {
+        return ticketDAO;
+    }
+
+    /**
+     * set access to ticketDAO.
+     * @param pTicketDAO ticket DAO
+     */
+    void setTicketDAO(final TicketDAO pTicketDAO) {
+        this.ticketDAO = pTicketDAO;
+    }
+
 
     /**
      * Calculate fare.

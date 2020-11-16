@@ -4,7 +4,8 @@ import com.mysql.cj.jdbc.MysqlDataSource;
 
 import javax.sql.DataSource;
 
-public class DataSourceFactory {
+public final class DataSourceFactory {
+    private DataSourceFactory() { }
 
     /**
      * Get DataSource information to allow connect.

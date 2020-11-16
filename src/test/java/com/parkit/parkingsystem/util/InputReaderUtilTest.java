@@ -63,15 +63,4 @@ public class InputReaderUtilTest {
 
         assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
     }
-
-    @Disabled
-    //TODO
-    @Test
-    public void readVehicleRegistrationNumberTestMoreThan10Char() {
-        final String vehicleRegNumber = "123 ABC 456";
-        provideInput(vehicleRegNumber);
-
-        //assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());
-        //Throw exception varchar > 10 ne devrait pas pouvoir passer
-    }
 }

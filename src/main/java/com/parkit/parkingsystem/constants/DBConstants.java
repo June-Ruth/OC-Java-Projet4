@@ -3,7 +3,8 @@ package com.parkit.parkingsystem.constants;
 /**
  * Manage DB constants.
  */
-public class DBConstants {
+public final class DBConstants {
+    private DBConstants() { }
 
     /**
      * Next parking spot.

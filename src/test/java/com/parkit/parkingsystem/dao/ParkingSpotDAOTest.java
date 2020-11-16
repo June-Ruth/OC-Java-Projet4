@@ -3,6 +3,7 @@ package com.parkit.parkingsystem.dao;
 import com.parkit.parkingsystem.config.DataBaseManager;
 import com.parkit.parkingsystem.config.DataSourceFactory;
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.h2.H2DataBaseService;
 import com.parkit.parkingsystem.h2.H2DatabaseMock;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.test.TestAppender;
@@ -36,18 +37,8 @@ public class ParkingSpotDAOTest {
 
     private static ParkingSpotDAO parkingSpotDAO;
     private ParkingSpot parkingSpot;
-
-    private static TestAppender appender;
-
-    private static Logger logger = LogManager.getLogger(ParkingSpotDAO.class);
-
     private static H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
-
-    @BeforeAll
-    public static void setUpBeforeAll() {
-        appender = new TestAppender();
-        ((org.apache.logging.log4j.core.Logger) logger).addAppender(appender);
-    }
+    private static H2DataBaseService dbService = new H2DataBaseService();
 
     @BeforeEach
     public void setUp() {
@@ -55,9 +46,7 @@ public class ParkingSpotDAOTest {
     }
 
     @AfterEach
-    public void cleanUp() {
-        appender.reset();
-    }
+    public void afterEach() { dbService.clearDBTest(); }
 
     @Test
     public void getNextAvailableSlotForBikeSuccess() throws Exception {
@@ -84,30 +73,12 @@ public class ParkingSpotDAOTest {
         dbMock.use(
                 () -> {
                     final String SET_AVAILABLE_FALSE = "update parking set available = false";
-                    final String SET_AVAILABLE_TRUE = "update parking set available = true";
-                    final String SET_AVAILABLE_FALSE_FOR_3 = "update parking set available = false where PARKING_NUMBER = 3";
-                    try (Connection con = dbMock.getConnection();
-                    PreparedStatement ps = con.prepareStatement(SET_AVAILABLE_FALSE);
-                    PreparedStatement ps2 = con.prepareStatement(SET_AVAILABLE_TRUE);
-                    PreparedStatement ps3 = con.prepareStatement(SET_AVAILABLE_FALSE_FOR_3)) {
+                    try (Connection con = dbService.getConnection();
+                    PreparedStatement ps = con.prepareStatement(SET_AVAILABLE_FALSE)) {
                         ps.executeUpdate();
                         assertEquals(0, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
-                        ps2.executeUpdate();
-                        ps3.executeUpdate();
                         return null;
                     }
-                }
-        );
-    }
-
-    @Disabled //TODO
-    @Test
-    public void getNextAvailableSlotException() throws Exception {
-        dbMock.use(
-                () -> {
-                    //Générer une exception SQL sur ps.setString par ex.)
-                    assertEquals(1, appender.getLogCount());
-                    return null;
                 }
         );
     }
@@ -118,18 +89,6 @@ public class ParkingSpotDAOTest {
         dbMock.use(
                 () -> {
                     assertTrue(parkingSpotDAO.updateParking(parkingSpot));
-                    return null;
-                }
-        );
-    }
-
-    @Disabled //TODO
-    @Test
-    public void updateParkingTestUnupdate() throws Exception {
-        dbMock.use(
-                () -> {
-                    //Générer une exception SQL dans l'Update.
-                    assertFalse(parkingSpotDAO.updateParking(parkingSpot));
                     return null;
                 }
         );

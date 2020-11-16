@@ -20,7 +20,16 @@ public class ParkingSpotDAO {
     /**
      * @see Logger
      */
-    private static final Logger LOGGER = LogManager.getLogger(ParkingSpotDAO.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(ParkingSpotDAO.class);
+    /**
+     * Constant one.
+     */
+    private static final byte ONE = 1;
+    /**
+     * Constant two.
+     */
+    private static final byte TWO = 2;
 
     /**
      * Get the next available spot to park.
@@ -32,10 +41,10 @@ public class ParkingSpotDAO {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
             PreparedStatement ps =
                     con.prepareStatement(DBConstants.GET_NEXT_PARKING_SPOT)) {
-            ps.setString(1, parkingType.toString());
+            ps.setString(ONE, parkingType.toString());
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    result = rs.getInt(1);
+                    result = rs.getInt(ONE);
                 }
             }
         } catch (SQLException ex) {
@@ -51,10 +60,11 @@ public class ParkingSpotDAO {
      */
     public boolean updateParking(final ParkingSpot parkingSpot) {
         try (Connection con = DataBaseManager.INSTANCE.getConnection();
-             PreparedStatement ps = con.prepareStatement(DBConstants.UPDATE_PARKING_SPOT)) {
+             PreparedStatement ps = con.prepareStatement(
+                     DBConstants.UPDATE_PARKING_SPOT)) {
 
-            ps.setBoolean(1, parkingSpot.isAvailable());
-            ps.setInt(2, parkingSpot.getId());
+            ps.setBoolean(ONE, parkingSpot.isAvailable());
+            ps.setInt(TWO, parkingSpot.getId());
             int updateRowCount = ps.executeUpdate();
             return (updateRowCount == 1);
         } catch (SQLException ex) {

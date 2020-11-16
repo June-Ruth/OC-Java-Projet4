@@ -5,7 +5,6 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
-import java.sql.SQLException;
 import java.time.Duration;
 
 /**
@@ -16,7 +15,16 @@ public class FareCalculatorService {
     /**
      * @see TicketDAO
      */
-    TicketDAO ticketDAO;
+    private TicketDAO ticketDAO = new TicketDAO();
+
+    /**
+     * set access to ticketDAO.
+     * @param pTicketDAO ticket DAO
+     */
+    void setTicketDAO(final TicketDAO pTicketDAO) {
+        ticketDAO = pTicketDAO;
+    }
+
 
     /**
      * Calculate fare.
@@ -24,7 +32,7 @@ public class FareCalculatorService {
      * If vehicleRegNumber is already in DB, then price will be 5% reducing.
      * @param ticket from user
      */
-    public void calculateFare(final Ticket ticket) throws SQLException {
+    void calculateFare(final Ticket ticket) {
 
         if (ticket.getOutTime() == null
                 || ticket.getOutTime().isBefore(ticket.getInTime())) {
@@ -41,19 +49,19 @@ public class FareCalculatorService {
         if (duration <= freeDuration) {
             ticket.setPrice(0);
         } else {
+            final double discountRate = 0.95;
+            final double usualRate = 1;
+            final double rate = ticketDAO.checkTicketByVehicleRegNumber(ticket.
+                    getVehicleRegNumber()) ? (discountRate) : (usualRate);
             switch (parkingType) {
                 case CAR:
-                    final double priceCar = ticketDAO.checkTicketByVehicleRegNumber(
-                            ticket.getVehicleRegNumber())
-                                    ? (duration * 0.95 * Fare.CAR_RATE_PER_HOUR)
-                                    : (duration * Fare.CAR_RATE_PER_HOUR);
+                    final double priceCar =
+                            duration * rate * Fare.CAR_RATE_PER_HOUR;
                     ticket.setPrice(priceCar);
                     break;
                 case BIKE:
-                    final double priceBike = ticketDAO.checkTicketByVehicleRegNumber(
-                            ticket.getVehicleRegNumber())
-                            ? (duration * 0.95 * Fare.BIKE_RATE_PER_HOUR)
-                            : (duration * Fare.BIKE_RATE_PER_HOUR);
+                    final double priceBike =
+                            duration * rate * Fare.BIKE_RATE_PER_HOUR;
                     ticket.setPrice(priceBike);
                     break;
                 default:

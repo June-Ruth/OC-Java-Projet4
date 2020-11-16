@@ -37,7 +37,7 @@ public class FareCalculatorServiceTest {
     @BeforeEach
     private void setUpPerTest() {
         ticket = new Ticket();
-        fareCalculatorService.ticketDAO = ticketDAO;
+        fareCalculatorService.setTicketDAO(ticketDAO);
     }
 
     @Test
@@ -158,19 +158,6 @@ public class FareCalculatorServiceTest {
         fareCalculatorService.calculateFare(ticket);
 
         assertEquals( (24 * Fare.CAR_RATE_PER_HOUR) , ticket.getPrice());
-    }
-
-    @Test
-    public void calculateFareTesUnknownType() {
-        LocalDateTime outTime = LocalDateTime.now();
-        LocalDateTime inTime = outTime.minusMinutes(60);
-        ParkingSpot parkingSpot = new ParkingSpot(1, TEST, false);
-
-        ticket.setInTime(inTime);
-        ticket.setOutTime(outTime);
-        ticket.setParkingSpot(parkingSpot);
-
-        assertThrows(IllegalArgumentException.class, () -> fareCalculatorService.calculateFare(ticket));
     }
 
     @Test

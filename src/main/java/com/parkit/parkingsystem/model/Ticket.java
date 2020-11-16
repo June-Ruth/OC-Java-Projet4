@@ -42,10 +42,10 @@ public class Ticket {
 
     /**
      * Setter ID.
-     * @param id ID
+     * @param pId ID
      */
-    public void setId(final int id) {
-        this.id = id;
+    public void setId(final int pId) {
+        id = pId;
     }
 
     /**
@@ -58,10 +58,10 @@ public class Ticket {
 
     /**
      * Setter ParingSpot.
-     * @param parkingSpot Parking Spot
+     * @param pParkingSpot Parking Spot
      */
-    public void setParkingSpot(final ParkingSpot parkingSpot) {
-        this.parkingSpot = parkingSpot;
+    public void setParkingSpot(final ParkingSpot pParkingSpot) {
+        parkingSpot = pParkingSpot;
     }
 
     /**
@@ -74,10 +74,10 @@ public class Ticket {
 
     /**
      * Setter Vehicle Number.
-     * @param vehicleRegNumber vehicle Number
+     * @param pVehicleRegNumber vehicle Number
      */
-    public void setVehicleRegNumber(final String vehicleRegNumber) {
-        this.vehicleRegNumber = vehicleRegNumber;
+    public void setVehicleRegNumber(final String pVehicleRegNumber) {
+        vehicleRegNumber = pVehicleRegNumber;
     }
 
     /**
@@ -90,10 +90,10 @@ public class Ticket {
 
     /**
      * Setter price.
-     * @param price price
+     * @param pPrice price
      */
-    public void setPrice(final double price) {
-        this.price = price;
+    public void setPrice(final double pPrice) {
+        price = pPrice;
     }
 
     /**
@@ -106,10 +106,10 @@ public class Ticket {
 
     /**
      * Setter Arrive Time.
-     * @param inTime arrive time
+     * @param pInTime arrive time
      */
-    public void setInTime(final LocalDateTime inTime) {
-        this.inTime = inTime;
+    public void setInTime(final LocalDateTime pInTime) {
+        inTime = pInTime;
     }
 
     /**
@@ -121,20 +121,33 @@ public class Ticket {
     }
     /**
      * Setter Exit Time.
-     * @param outTime exit time
+     * @param pOutTime exit time
      */
-    public void setOutTime(final LocalDateTime outTime) {
-        this.outTime = outTime;
+    public void setOutTime(final LocalDateTime pOutTime) {
+        outTime = pOutTime;
     }
 
+    /**
+     * Check Equality by ID.
+     * @param o Ticket.
+     * @return boolean true if equal.
+     */
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         Ticket ticket = (Ticket) o;
         return id == ticket.id;
     }
 
+    /**
+     * Hash by Id to allow compare of Ticket.
+     * @return int hash of ID.
+     */
     @Override
     public int hashCode() {
         return  Objects.hash(id);

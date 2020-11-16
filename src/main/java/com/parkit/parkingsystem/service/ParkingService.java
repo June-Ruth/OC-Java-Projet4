@@ -25,8 +25,8 @@ public class ParkingService {
     /**
      * @see FareCalculatorService
      */
-    FareCalculatorService fareCalculatorService;
-
+    private FareCalculatorService fareCalculatorService =
+            new FareCalculatorService();
     /**
      * @see InputReaderUtil
      */
@@ -38,20 +38,27 @@ public class ParkingService {
     /**
      * @see TicketDAO
      */
-    TicketDAO ticketDAO;
-
+    private TicketDAO ticketDAO;
     /**
      * Constructor.
-     * @param inputReaderUtil user selection
-     * @param parkingSpotDAO model parking spot
-     * @param ticketDAO model ticket
+     * @param pInputReaderUtil user selection
+     * @param pParkingSpotDAO model parking spot
+     * @param pTicketDAO model ticket
      */
-    public ParkingService(final InputReaderUtil inputReaderUtil,
-                          final ParkingSpotDAO parkingSpotDAO,
-                          final TicketDAO ticketDAO) {
-        this.inputReaderUtil = inputReaderUtil;
-        this.parkingSpotDAO = parkingSpotDAO;
-        this.ticketDAO = ticketDAO;
+    public ParkingService(final InputReaderUtil pInputReaderUtil,
+                          final ParkingSpotDAO pParkingSpotDAO,
+                          final TicketDAO pTicketDAO) {
+        inputReaderUtil = pInputReaderUtil;
+        parkingSpotDAO = pParkingSpotDAO;
+        ticketDAO = pTicketDAO;
+    }
+    /**
+     * set FareCalculatorService.
+     * @param pFareCalculatorService FareCalculatorService
+     */
+    void setFareCalculatorService(final FareCalculatorService
+                                          pFareCalculatorService) {
+        fareCalculatorService = pFareCalculatorService;
     }
 
     /**
@@ -64,26 +71,21 @@ public class ParkingService {
             if (parkingSpot != null && parkingSpot.getId() > 0) {
 
                 String vehicleRegNumber = getVehicleRegNumber();
-
+                if (ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber)) {
+                    LOGGER.info("Welcome back! "
+                            + "As a recurring user of our parking lot, "
+                            + "you'll benefit from a 5% discount.");
+                }
                 parkingSpot.setAvailable(false);
-
                 parkingSpotDAO.updateParking(parkingSpot);
-                //allot this parking space and mark it's availability as false
-
                 LocalDateTime inTime = LocalDateTime.now();
-
                 Ticket ticket = new Ticket();
-                /*
-                ID, PARKING_NUMBER, VEHICLE_REG_NUMBER,
-                PRICE, IN_TIME, OUT_TIME)
-                ticket.setId(ticketID);
-                */
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
                 ticket.setInTime(inTime);
                 ticket.setOutTime(null);
-                ticketDAO.saveTicket(ticket); //pas de traitement en cas de pas save the ticket
+                ticketDAO.saveTicket(ticket);
                 LOGGER.info("Generated Ticket and saved in DB");
                 LOGGER.info(
                         "Please park your vehicle in spot number:"
@@ -100,7 +102,6 @@ public class ParkingService {
     /**
      * Get the vehicle registration number.
      * @return vehicle registration number
-     * @throws Exception if vehicle reg number doesn't exist
      */
     private String getVehicleRegNumber() {
         LOGGER.info("Please type the vehicle registration number "
@@ -113,9 +114,9 @@ public class ParkingService {
      * @return parking spot
      * @throws Exception if parking is full
      */
-    public ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
-        int parkingNumber = 0;
-        ParkingSpot parkingSpot = null;
+    ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
+        int parkingNumber;
+        ParkingSpot parkingSpot;
         ParkingType parkingType = getVehicleType();
 
         parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);
@@ -154,7 +155,7 @@ public class ParkingService {
     /**
      * Process when vehicle exit.
      */
-    public void processExitingVehicle() throws Exception {
+    public void processExitingVehicle() {
         try {
             String vehicleRegNumber = getVehicleRegNumber();
             Ticket ticket = ticketDAO.getTicket(vehicleRegNumber);

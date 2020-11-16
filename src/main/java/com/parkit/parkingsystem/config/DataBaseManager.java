@@ -16,21 +16,30 @@ import java.util.Properties;
  * Configuration for DataBase using Singleton pattern.
  */
 public enum DataBaseManager {
+    /**
+     * Instance for Singleton pattern.
+     */
     INSTANCE;
 
     /**
      * @see Logger
      */
-    private final Logger LOGGER = LogManager.getLogger(DataBaseManager.class);
+    private static final Logger LOGGER =
+            LogManager.getLogger(DataBaseManager.class);
 
+    /**
+     * @see DataSource
+     */
     private DataSource dataSource;
 
     DataBaseManager() {
         Properties properties = new Properties();
-        FileInputStream fis;
-        try {
-            URL propertiesUrl = DataBaseManager.class.getClassLoader().getResource("db.properties");
-            fis = new FileInputStream(new File(propertiesUrl.getFile()));
+        URL propertiesUrl = DataBaseManager.class.getClassLoader().
+                getResource("db.properties");
+        File file;
+        assert propertiesUrl != null;
+        file = new File(propertiesUrl.getFile());
+        try (FileInputStream fis = new FileInputStream(file)) {
             properties.load(fis);
             dataSource = DataSourceFactory.get(
                     properties.getProperty("jdbc.url"),
@@ -38,7 +47,8 @@ public enum DataBaseManager {
                     properties.getProperty("jdbc.password")
             );
         } catch (IOException e) {
-            LOGGER.error("Error while getting db properties", e);
+            LogManager.getLogger(DataBaseManager.class)
+                    .error("Error while getting db properties", e);
         }
     }
 

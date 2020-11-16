@@ -3,7 +3,8 @@ package com.parkit.parkingsystem.constants;
 /**
  * Fare for type of vehicle.
  */
-public class Fare {
+public final class Fare {
+    private Fare() { }
 
     /**
      * Bike rate per hour.

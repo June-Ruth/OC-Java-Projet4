@@ -5,13 +5,13 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Scanner;
 
 /**
  * Interactive Shell with options.
  */
-public class InteractiveShell {
+public final class InteractiveShell {
+    private InteractiveShell() { }
 
     /**
      * @see Logger
@@ -20,10 +20,16 @@ public class InteractiveShell {
             LoggerFactory.getLogger(InteractiveShell.class);
 
     /**
+     * @see Scanner
+     */
+    private static Scanner scan =
+            new Scanner(System.in, "UTF-8");
+
+    /**
      * Define Input origin.
      */
-    static InputReaderUtil inputReaderUtil =
-            new InputReaderUtil(new Scanner(System.in));
+    private static InputReaderUtil inputReaderUtil =
+            new InputReaderUtil(scan);
 
     /**
      * @see ParkingSpotDAO
@@ -38,8 +44,29 @@ public class InteractiveShell {
     /**
      * @see ParkingService
      */
-     static ParkingService parkingService =
+    private static ParkingService parkingService =
             new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
+
+    /**
+     * Constant one.
+     */
+    private static final byte ONE = 1;
+    /**
+     * Constant two.
+     */
+    private static final byte TWO = 2;
+    /**
+     * Constant three.
+     */
+    private static final byte THREE = 3;
+
+    static void setInputReaderUtil(final InputReaderUtil pInputReaderUtil) {
+        inputReaderUtil = pInputReaderUtil;
+    }
+
+    static void setParkingService(final ParkingService pParkingService) {
+        parkingService = pParkingService;
+    }
 
     /**
      * Load Interface depending on option.
@@ -53,15 +80,15 @@ public class InteractiveShell {
             loadMenu();
             int option = inputReaderUtil.readSelection();
             switch (option) {
-                case 1:
+                case ONE:
                     parkingService.processIncomingVehicle();
                     continueApp = false;
                     break;
-                case 2:
+                case TWO:
                     parkingService.processExitingVehicle();
                     continueApp = false;
                     break;
-                case 3:
+                case THREE:
                     LOGGER.info("Exiting from the system!");
                     continueApp = false;
                     break;

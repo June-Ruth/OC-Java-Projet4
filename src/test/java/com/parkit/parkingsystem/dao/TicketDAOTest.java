@@ -1,12 +1,10 @@
 package com.parkit.parkingsystem.dao;
 
 import com.parkit.parkingsystem.constants.ParkingType;
+import com.parkit.parkingsystem.h2.H2DataBaseService;
 import com.parkit.parkingsystem.h2.H2DatabaseMock;
 import com.parkit.parkingsystem.model.ParkingSpot;
 import com.parkit.parkingsystem.model.Ticket;
-import com.parkit.parkingsystem.test.TestAppender;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -19,26 +17,19 @@ import static org.junit.jupiter.api.Assertions.*;
 public class TicketDAOTest {
 
     private static H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
+    private static H2DataBaseService dbService = new H2DataBaseService();
 
     private TicketDAO ticketDAO;
-    private static Ticket ticketInOutModel;
     private static Ticket ticketInModel;
-    private static Logger logger = LogManager.getLogger(TicketDAO.class);
-    private  static TestAppender appender;
 
     @BeforeAll
-    public static void setUpBeforeAll() {
-        appender = new TestAppender();
-        ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
-
-        ticketInOutModel = new Ticket();
-        ticketInOutModel.setId(1);
-        ticketInOutModel.setParkingSpot(new ParkingSpot(1, ParkingType.CAR, true));
-        ticketInOutModel.setVehicleRegNumber("ABC123DEF");
-        ticketInOutModel.setPrice(1.5);
-        ticketInOutModel.setInTime(LocalDateTime.of(2020, 1, 1, 12, 0));
-        ticketInOutModel.setOutTime(LocalDateTime.of(2020, 1, 1, 13, 0));
-
+    public static void setUpBeforeAll() throws Exception {
+        dbMock.use(
+                () -> {
+                    dbService.setUpBeforeUnitTestTicketDAO();
+                    return null;
+                }
+        );
         ticketInModel = new Ticket();
         ticketInModel.setId(2);
         ticketInModel.setParkingSpot(new ParkingSpot(3, ParkingType.CAR, false));
@@ -51,15 +42,14 @@ public class TicketDAOTest {
         ticketDAO = new TicketDAO();
     }
 
-    @AfterEach
-    public void cleanUp() {
-        appender.reset();
+    @AfterAll
+    public static void tearDown() {
+        dbService.clearDBTest();
     }
 
     @Test
     public void saveTicketTestSuccess() throws Exception {
         Ticket newTicket = new Ticket();
-        //newTicket.setId(3);
         newTicket.setParkingSpot(new ParkingSpot(2, ParkingType.CAR, true));
         newTicket.setVehicleRegNumber("123NEW456");
         newTicket.setInTime(LocalDateTime.of(2020, 2,3, 12, 0));
@@ -108,19 +98,6 @@ public class TicketDAOTest {
         );
     }
 
-    @Disabled //TODO
-    @Test
-    public void getTicketTestException() throws Exception {
-        String vehicleRegNumber = "ABC 123 DEF";
-        dbMock.use(
-                () -> {
-                    ticketDAO.getTicket(vehicleRegNumber);
-                    assertEquals(1, appender.getLogCount());
-                    return null;
-                }
-        );
-    }
-
     @Test
     public void checkTicketByVehicleRegNumberTestTrue() throws Exception {
         String vehicleRegNumber = "ABC123DEF";
@@ -138,19 +115,6 @@ public class TicketDAOTest {
         dbMock.use(
                 () -> {
                     assertFalse(ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber));
-                    return null;
-                }
-        );
-    }
-
-    @Disabled //TODO
-    @Test
-    public void checkTicketByVehicleRegNumberTestException() throws Exception {
-        String vehicleRegNumber = " ";
-        dbMock.use(
-                () -> {
-                    ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber);
-                    assertEquals(1, appender.getLogCount());
                     return null;
                 }
         );
@@ -180,20 +144,4 @@ public class TicketDAOTest {
                 }
         );
     }
-
-    @Disabled //TODO
-    @Test
-    public void updateTicketTestException() throws Exception {
-        Ticket newTicket = new Ticket();
-        newTicket.setOutTime(LocalDateTime.of(2020, 2, 1, 13, 0));
-        newTicket.setId(-1);
-        dbMock.use(
-                () -> {
-                    ticketDAO.updateTicket(newTicket);
-                    assertEquals(1, appender.getLogCount());
-                    return null;
-                }
-        );
-    }
-
 }

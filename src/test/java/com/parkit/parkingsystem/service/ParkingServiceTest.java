@@ -13,16 +13,13 @@ import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.sql.SQLException;
 import java.time.LocalDateTime;
-import java.util.logging.Level;
 
 import static org.mockito.Mockito.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingServiceTest {
+class ParkingServiceTest {
 
     private static ParkingService parkingService;
 
@@ -40,24 +37,24 @@ public class ParkingServiceTest {
     private static FareCalculatorService fareCalculatorService;
 
     @BeforeAll
-    public static void setUpBeforeAll() {
+    static void setUpBeforeAll() {
         appender = new TestAppender();
         ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
     }
 
     @BeforeEach
-    public void setUpBeforeEach() {
+    void setUpBeforeEach() {
         parkingService = new ParkingService(inputReaderUtil, parkingSpotDAO, ticketDAO);
         parkingService.setFareCalculatorService(fareCalculatorService);
     }
 
     @AfterEach
-    public void cleanUp() {
+    void cleanUp() {
         appender.reset();
     }
 
     @Test
-    public void processIncomingVehicleTestCar() throws Exception {
+    void processIncomingVehicleTestCar() throws Exception {
         Ticket ticket = new Ticket();
         ticket.setParkingSpot(new ParkingSpot(1, ParkingType.CAR,false));
         ticket.setVehicleRegNumber("ABCDEF");
@@ -75,12 +72,12 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processIncomingVehicleTestException() {
+    void processIncomingVehicleTestException() {
         assertThrows(Exception.class, ()-> parkingService.processIncomingVehicle());
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTestCar() throws Exception{
+    void getNextParkingNumberIfAvailableTestCar() throws Exception{
         ParkingType parkingType = ParkingType.CAR;
         ParkingSpot parkingSpot =  new ParkingSpot(1, parkingType, true);
 
@@ -91,7 +88,7 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTestBike() throws Exception {
+    void getNextParkingNumberIfAvailableTestBike() throws Exception {
         ParkingType parkingType = ParkingType.BIKE;
         ParkingSpot parkingSpot =  new ParkingSpot(1, parkingType, true);
 
@@ -102,14 +99,14 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTestDefault(){
+    void getNextParkingNumberIfAvailableTestDefault() {
         when(inputReaderUtil.readSelection()).thenReturn(3);
 
         assertThrows(IllegalArgumentException.class, () -> parkingService.getNextParkingNumberIfAvailable());
     }
 
     @Test
-    public void getNextParkingNumberIfAvailableTestCarNotAvailable() throws SQLException {
+    void getNextParkingNumberIfAvailableTestCarNotAvailable() {
         ParkingType parkingType = ParkingType.CAR;
 
         when(inputReaderUtil.readSelection()).thenReturn(1);
@@ -120,7 +117,7 @@ public class ParkingServiceTest {
 
 
     @Test
-    public void processExitingVehicleTestCar() throws Exception{
+    void processExitingVehicleTestCar() {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));
@@ -138,12 +135,12 @@ public class ParkingServiceTest {
     }
 
     @Test
-    public void processExitingVehicleTestException() {
+    void processExitingVehicleTestException() {
             assertThrows(NullPointerException.class, ()-> parkingService.processExitingVehicle());
     }
 
     @Test
-    public void processExitingVehicleTestElseCase() throws Exception {
+    void processExitingVehicleTestElseCase() {
         ParkingSpot parkingSpot = new ParkingSpot(1, ParkingType.CAR,false);
         Ticket ticket = new Ticket();
         ticket.setInTime(LocalDateTime.now().minusMinutes(60));

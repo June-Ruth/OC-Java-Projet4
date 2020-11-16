@@ -13,12 +13,12 @@ import static org.mockito.Mockito.anyString;
 import static org.mockito.Mockito.mockStatic;
 
 @ExtendWith(MockitoExtension.class)
-public class DataBaseManagerTest {
+class DataBaseManagerTest {
 
     private JdbcDataSource dataSource = new JdbcDataSource();
 
     @Test
-    public void getConnectionTestSuccess() throws Exception {
+    void getConnectionTestSuccess() throws Exception {
         try (MockedStatic<DataSourceFactory> factoryMock = mockStatic(DataSourceFactory.class)) {
             dataSource.setURL("jdbc:h2:mem:prod;DB_CLOSE_DELAY=-1;INIT=create schema if not exists test\\;");
             dataSource.setUser("user");

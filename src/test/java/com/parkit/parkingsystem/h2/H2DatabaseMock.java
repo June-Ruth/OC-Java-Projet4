@@ -7,6 +7,7 @@ import org.mockito.MockedStatic;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.Objects;
 import java.util.concurrent.Callable;
 
 import static org.mockito.ArgumentMatchers.anyString;
@@ -31,7 +32,7 @@ public class H2DatabaseMock {
                     .when(() -> DataSourceFactory.get(anyString(), anyString(), anyString()))
                     .thenReturn(dataSource);
             if (!isInit) {
-                byte[] readAllBytes = Files.readAllBytes(Paths.get(this.getClass().getClassLoader().getResource(createFilePath).toURI()));
+                byte[] readAllBytes = Files.readAllBytes(Paths.get(Objects.requireNonNull(this.getClass().getClassLoader().getResource(createFilePath)).toURI()));
                 String sql = new String(readAllBytes);
                 DataBaseManager.INSTANCE.getConnection().prepareStatement(sql).executeUpdate();
                 isInit = true;

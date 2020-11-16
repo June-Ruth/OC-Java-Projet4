@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class TicketDAOTest {
+class TicketDAOTest {
 
     private static H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
     private static H2DataBaseService dbService = new H2DataBaseService();
@@ -23,7 +23,7 @@ public class TicketDAOTest {
     private static Ticket ticketInModel;
 
     @BeforeAll
-    public static void setUpBeforeAll() throws Exception {
+    static void setUpBeforeAll() throws Exception {
         dbMock.use(
                 () -> {
                     dbService.setUpBeforeUnitTestTicketDAO();
@@ -38,17 +38,17 @@ public class TicketDAOTest {
     }
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         ticketDAO = new TicketDAO();
     }
 
     @AfterAll
-    public static void tearDown() {
+    static void tearDown() {
         dbService.clearDBTest();
     }
 
     @Test
-    public void saveTicketTestSuccess() throws Exception {
+    void saveTicketTestSuccess() throws Exception {
         Ticket newTicket = new Ticket();
         newTicket.setParkingSpot(new ParkingSpot(2, ParkingType.CAR, true));
         newTicket.setVehicleRegNumber("123NEW456");
@@ -62,7 +62,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void saveTicketTestFail() throws Exception {
+    void saveTicketTestFail() throws Exception {
         Ticket newTicket = new Ticket();
         newTicket.setParkingSpot(new ParkingSpot(2, ParkingType.CAR, true));
         newTicket.setVehicleRegNumber(null);
@@ -76,7 +76,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void getTicketTestSuccess() throws Exception {
+    void getTicketTestSuccess() throws Exception {
         String vehicleRegNumber = "ABC123DEF";
         dbMock.use(
                 () -> {
@@ -87,8 +87,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    //NB : pourrait ajouter un message d'erreur pour signaler à l'utilisateur que son numéro de véhicule n'est pas reconnu
-    public void getTicketTestWithNonExistingVehicleRegNumber() throws Exception {
+    void getTicketTestWithNonExistingVehicleRegNumber() throws Exception {
         String vehicleRegNumber = "GHI456JKL";
         dbMock.use(
                 () -> {
@@ -99,7 +98,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void checkTicketByVehicleRegNumberTestTrue() throws Exception {
+    void checkTicketByVehicleRegNumberTestTrue() throws Exception {
         String vehicleRegNumber = "ABC123DEF";
         dbMock.use(
                 () -> {
@@ -110,7 +109,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void checkTicketByVehicleRegNumberTestFalse() throws Exception {
+    void checkTicketByVehicleRegNumberTestFalse() throws Exception {
         String vehicleRegNumber = "GHI456JKL";
         dbMock.use(
                 () -> {
@@ -121,7 +120,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void updateTicketTestSuccess() throws Exception {
+    void updateTicketTestSuccess() throws Exception {
         ticketInModel.setPrice(1.5);
         ticketInModel.setOutTime(LocalDateTime.of(2020, 1, 1, 13, 0));
         dbMock.use(
@@ -133,7 +132,7 @@ public class TicketDAOTest {
     }
 
     @Test
-    public void updateTicketTestFail() throws Exception {
+    void updateTicketTestFail() throws Exception {
         Ticket newTicket = new Ticket();
         newTicket.setOutTime(LocalDateTime.of(2020, 2, 1, 13, 0));
         newTicket.setId(4543);

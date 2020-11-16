@@ -45,7 +45,7 @@ public class Ticket {
      * @param pId ID
      */
     public void setId(final int pId) {
-        this.id = pId;
+        id = pId;
     }
 
     /**
@@ -61,7 +61,7 @@ public class Ticket {
      * @param pParkingSpot Parking Spot
      */
     public void setParkingSpot(final ParkingSpot pParkingSpot) {
-        this.parkingSpot = pParkingSpot;
+        parkingSpot = pParkingSpot;
     }
 
     /**
@@ -77,7 +77,7 @@ public class Ticket {
      * @param pVehicleRegNumber vehicle Number
      */
     public void setVehicleRegNumber(final String pVehicleRegNumber) {
-        this.vehicleRegNumber = pVehicleRegNumber;
+        vehicleRegNumber = pVehicleRegNumber;
     }
 
     /**
@@ -93,7 +93,7 @@ public class Ticket {
      * @param pPrice price
      */
     public void setPrice(final double pPrice) {
-        this.price = pPrice;
+        price = pPrice;
     }
 
     /**
@@ -109,7 +109,7 @@ public class Ticket {
      * @param pInTime arrive time
      */
     public void setInTime(final LocalDateTime pInTime) {
-        this.inTime = pInTime;
+        inTime = pInTime;
     }
 
     /**
@@ -124,7 +124,7 @@ public class Ticket {
      * @param pOutTime exit time
      */
     public void setOutTime(final LocalDateTime pOutTime) {
-        this.outTime = pOutTime;
+        outTime = pOutTime;
     }
 
     /**

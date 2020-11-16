@@ -27,9 +27,9 @@ public class ParkingSpot {
      */
     public ParkingSpot(final int pNumber, final ParkingType pParkingType,
                        final boolean pIsAvailable) {
-        this.number = pNumber;
-        this.parkingType = pParkingType;
-        this.isAvailable = pIsAvailable;
+        number = pNumber;
+        parkingType = pParkingType;
+        isAvailable = pIsAvailable;
     }
 
     /**
@@ -38,14 +38,6 @@ public class ParkingSpot {
      */
     public int getId() {
         return number;
-    }
-
-    /**
-     * Setter ID.
-     * @param pNumber : ID of spot
-     */
-    public void setId(final int pNumber) {
-        this.number = pNumber;
     }
 
     /**
@@ -61,7 +53,7 @@ public class ParkingSpot {
      * @param pParkingType bike, car...
      */
     public void setParkingType(final ParkingType pParkingType) {
-        this.parkingType = pParkingType;
+        parkingType = pParkingType;
     }
 
     /**

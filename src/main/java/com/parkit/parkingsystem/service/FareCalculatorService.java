@@ -5,7 +5,6 @@ import com.parkit.parkingsystem.constants.ParkingType;
 import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.model.Ticket;
 
-import java.sql.SQLException;
 import java.time.Duration;
 
 /**
@@ -31,7 +30,7 @@ public class FareCalculatorService {
      * @param pTicketDAO ticket DAO
      */
     void setTicketDAO(final TicketDAO pTicketDAO) {
-        this.ticketDAO = pTicketDAO;
+        ticketDAO = pTicketDAO;
     }
 
 
@@ -41,7 +40,7 @@ public class FareCalculatorService {
      * If vehicleRegNumber is already in DB, then price will be 5% reducing.
      * @param ticket from user
      */
-    public void calculateFare(final Ticket ticket) throws SQLException {
+    void calculateFare(final Ticket ticket) {
 
         if (ticket.getOutTime() == null
                 || ticket.getOutTime().isBefore(ticket.getInTime())) {

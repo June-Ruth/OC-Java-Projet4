@@ -48,9 +48,9 @@ public class ParkingService {
     public ParkingService(final InputReaderUtil pInputReaderUtil,
                           final ParkingSpotDAO pParkingSpotDAO,
                           final TicketDAO pTicketDAO) {
-        this.inputReaderUtil = pInputReaderUtil;
-        this.parkingSpotDAO = pParkingSpotDAO;
-        this.ticketDAO = pTicketDAO;
+        inputReaderUtil = pInputReaderUtil;
+        parkingSpotDAO = pParkingSpotDAO;
+        ticketDAO = pTicketDAO;
     }
     /**
      * get access to TicketDAO.
@@ -64,7 +64,7 @@ public class ParkingService {
      * @param pTicketDAO ticket DAO
      */
     void setTicketDAO(final TicketDAO pTicketDAO) {
-        this.ticketDAO = pTicketDAO;
+        ticketDAO = pTicketDAO;
     }
     /**
      * getFareCalculatorService.
@@ -79,30 +79,28 @@ public class ParkingService {
      */
     void setFareCalculatorService(final FareCalculatorService
                                           pFareCalculatorService) {
-        this.fareCalculatorService = pFareCalculatorService;
+        fareCalculatorService = pFareCalculatorService;
     }
 
     /**
      * Process when vehicle enter.
      */
     public void processIncomingVehicle() throws Exception {
-        //TODO : si utilisateur récurrent, afficher un message d'accueil.
         try {
             ParkingSpot parkingSpot = getNextParkingNumberIfAvailable();
 
             if (parkingSpot != null && parkingSpot.getId() > 0) {
 
                 String vehicleRegNumber = getVehicleRegNumber();
-
+                if (ticketDAO.checkTicketByVehicleRegNumber(vehicleRegNumber)) {
+                    LOGGER.info("Welcome back! "
+                            + "As a recurring user of our parking lot, "
+                            + "you'll benefit from a 5% discount.");
+                }
                 parkingSpot.setAvailable(false);
-
                 parkingSpotDAO.updateParking(parkingSpot);
-                //allot this parking space and mark it's availability as false
-
                 LocalDateTime inTime = LocalDateTime.now();
-
                 Ticket ticket = new Ticket();
-
                 ticket.setParkingSpot(parkingSpot);
                 ticket.setVehicleRegNumber(vehicleRegNumber);
                 ticket.setPrice(0);
@@ -125,7 +123,6 @@ public class ParkingService {
     /**
      * Get the vehicle registration number.
      * @return vehicle registration number
-     * @throws Exception if vehicle reg number doesn't exist
      */
     private String getVehicleRegNumber() {
         LOGGER.info("Please type the vehicle registration number "
@@ -138,9 +135,9 @@ public class ParkingService {
      * @return parking spot
      * @throws Exception if parking is full
      */
-    public ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
-        int parkingNumber = 0;
-        ParkingSpot parkingSpot = null;
+    ParkingSpot getNextParkingNumberIfAvailable() throws Exception {
+        int parkingNumber;
+        ParkingSpot parkingSpot;
         ParkingType parkingType = getVehicleType();
 
         parkingNumber = parkingSpotDAO.getNextAvailableSlot(parkingType);

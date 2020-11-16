@@ -37,22 +37,18 @@ public enum DataBaseManager {
         URL propertiesUrl = DataBaseManager.class.getClassLoader().
                 getResource("db.properties");
         File file;
-        if (propertiesUrl.getFile() != null) {
-            file = new File(propertiesUrl.getFile());
-            try (FileInputStream fis = new FileInputStream(file)) {
-                properties.load(fis);
-                dataSource = DataSourceFactory.get(
-                        properties.getProperty("jdbc.url"),
-                        properties.getProperty("jdbc.user"),
-                        properties.getProperty("jdbc.password")
-                );
-            } catch (IOException e) {
-                LogManager.getLogger(DataBaseManager.class)
-                        .error("Error while getting db properties", e);
-            }
-        } else {
+        assert propertiesUrl != null;
+        file = new File(propertiesUrl.getFile());
+        try (FileInputStream fis = new FileInputStream(file)) {
+            properties.load(fis);
+            dataSource = DataSourceFactory.get(
+                    properties.getProperty("jdbc.url"),
+                    properties.getProperty("jdbc.user"),
+                    properties.getProperty("jdbc.password")
+            );
+        } catch (IOException e) {
             LogManager.getLogger(DataBaseManager.class)
-                    .error("Missing db properties file");
+                    .error("Error while getting db properties", e);
         }
     }
 

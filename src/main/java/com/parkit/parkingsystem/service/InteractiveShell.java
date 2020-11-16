@@ -5,7 +5,6 @@ import com.parkit.parkingsystem.dao.TicketDAO;
 import com.parkit.parkingsystem.util.InputReaderUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
 import java.util.Scanner;
 
 /**
@@ -23,7 +22,8 @@ public final class InteractiveShell {
     /**
      * @see Scanner
      */
-    private static Scanner scan = new Scanner(System.in);
+    private static Scanner scan =
+            new Scanner(System.in, "UTF-8");
 
     /**
      * Define Input origin.

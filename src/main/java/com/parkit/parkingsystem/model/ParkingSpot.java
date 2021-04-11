@@ -21,15 +21,15 @@ public class ParkingSpot {
 
     /**
      * Constructor.
-     * @param number : spot ID
-     * @param parkingType of spot
-     * @param isAvailable of spot
+     * @param pNumber : spot ID
+     * @param pParkingType of spot
+     * @param pIsAvailable of spot
      */
-    public ParkingSpot(final int number, final ParkingType parkingType,
-                       final boolean isAvailable) {
-        this.number = number;
-        this.parkingType = parkingType;
-        this.isAvailable = isAvailable;
+    public ParkingSpot(final int pNumber, final ParkingType pParkingType,
+                       final boolean pIsAvailable) {
+        number = pNumber;
+        parkingType = pParkingType;
+        isAvailable = pIsAvailable;
     }
 
     /**
@@ -41,27 +41,11 @@ public class ParkingSpot {
     }
 
     /**
-     * Setter ID.
-     * @param number : ID of spot
-     */
-    public void setId(final int number) {
-        this.number = number;
-    }
-
-    /**
      * Getter parking type.
      * @return parking type
      */
     public ParkingType getParkingType() {
         return parkingType;
-    }
-
-    /**
-     * Setter parking type.
-     * @param parkingType bike, car...
-     */
-    public void setParkingType(final ParkingType parkingType) {
-        this.parkingType = parkingType;
     }
 
     /**
@@ -74,10 +58,10 @@ public class ParkingSpot {
 
     /**
      * Setter availability.
-     * @param available or not
+     * @param pAvailable or not
      */
-    public void setAvailable(final boolean available) {
-        isAvailable = available;
+    public void setAvailable(final boolean pAvailable) {
+        isAvailable = pAvailable;
     }
 
     /**

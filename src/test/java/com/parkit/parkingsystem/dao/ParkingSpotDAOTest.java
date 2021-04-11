@@ -1,65 +1,78 @@
 package com.parkit.parkingsystem.dao;
 
-import com.parkit.parkingsystem.config.DataBaseConfig;
 import com.parkit.parkingsystem.constants.ParkingType;
-import com.parkit.parkingsystem.test.TestAppender;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.Test;
+import com.parkit.parkingsystem.h2.H2DBConstants;
+import com.parkit.parkingsystem.h2.H2DataBaseService;
+import com.parkit.parkingsystem.h2.H2DatabaseMock;
+import com.parkit.parkingsystem.model.ParkingSpot;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
+import java.sql.Connection;
+import java.sql.PreparedStatement;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class ParkingSpotDAOTest {
+class ParkingSpotDAOTest {
 
     private static ParkingSpotDAO parkingSpotDAO;
+    private ParkingSpot parkingSpot;
+    private static H2DatabaseMock dbMock = new H2DatabaseMock("test-data.sql");
+    private static H2DataBaseService dbService = new H2DataBaseService();
 
-    private  static TestAppender appender;
-
-    private static Logger logger = LogManager.getLogger(ParkingSpotDAO.class);
-
-    @Mock
-    public DataBaseConfig dataBaseConfig;
-
-    @BeforeAll
-    public static void setUpBeforeAll() {
-        appender = new TestAppender();
-        ((org.apache.logging.log4j.core.Logger)logger).addAppender(appender);
+    @BeforeEach
+    void setUp() {
+        parkingSpotDAO = new ParkingSpotDAO();
     }
 
     @AfterEach
-    public void cleanUp() {
-        appender.reset();
-    }
+    void afterEach() { dbService.clearDBTest(); }
 
-    @Disabled
     @Test
-    public void getNextAvailableSlotForBike() throws Exception {
-
-        //when(dataBaseConfig.getConnection()).thenReturn();
-
-        parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE);
-    }
-
-    @Disabled
-    @Test
-    public void getNextAvailableSlotForCar(){
-
-        parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR);
+    void getNextAvailableSlotForBikeSuccess() throws Exception {
+        dbMock.use(
+                () -> {
+                    assertEquals(4, parkingSpotDAO.getNextAvailableSlot(ParkingType.BIKE));
+                    return null;
+                }
+        );
     }
 
     @Test
-    public void getNextAvailableSlotException(){
-        assertThrows(Exception.class, () -> parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
+    void getNextAvailableSlotForCarSuccess() throws Exception {
+        dbMock.use(
+                () -> {
+                    assertEquals(1, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
+                    return null;
+                }
+        );
     }
 
+    @Test
+    void getNextAvailableSlotForCarFail() throws Exception {
+        dbMock.use(
+                () -> {
+                    try (Connection con = dbService.getConnection();
+                    PreparedStatement ps = con.prepareStatement(H2DBConstants.SET_AVAILABLE_FALSE)) {
+                        ps.executeUpdate();
+                        assertEquals(0, parkingSpotDAO.getNextAvailableSlot(ParkingType.CAR));
+                        return null;
+                    }
+                }
+        );
+    }
 
+    @Test
+    void updateParkingTestUpdate() throws Exception {
+        parkingSpot = new ParkingSpot(1, ParkingType.CAR, true);
+        dbMock.use(
+                () -> {
+                    assertTrue(parkingSpotDAO.updateParking(parkingSpot));
+                    return null;
+                }
+        );
+    }
 }
+
+

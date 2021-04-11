@@ -1,6 +1,5 @@
-/* Setting up PROD DB */
-create database prod;
-use prod;
+/* Setting up TEST DB */
+/*create database test;*/
 
 create table parking(
 PARKING_NUMBER int PRIMARY KEY,
@@ -16,7 +15,8 @@ create table ticket(
  IN_TIME DATETIME NOT NULL,
  OUT_TIME DATETIME,
  FOREIGN KEY (PARKING_NUMBER)
- REFERENCES parking(PARKING_NUMBER));
+ REFERENCES parking(PARKING_NUMBER)
+);
 
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(1,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(2,true,'CAR');
@@ -24,4 +24,3 @@ insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(3,true,'CAR');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(4,true,'BIKE');
 insert into parking(PARKING_NUMBER,AVAILABLE,TYPE) values(5,true,'BIKE');
 commit;
-

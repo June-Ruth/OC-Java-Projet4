@@ -3,14 +3,15 @@ package com.parkit.parkingsystem.constants;
 /**
  * Manage DB constants.
  */
-public class DBConstants {
+public final class DBConstants {
+    private DBConstants() { }
 
     /**
      * Next parking spot.
      */
     public static final String GET_NEXT_PARKING_SPOT =
-            "select min(PARKING_NUMBER) from parking where AVAILABLE ="
-                    + "true and TYPE = ?";
+            "select min(PARKING_NUMBER) from parking "
+                    + "where AVAILABLE = true and TYPE = ?";
 
     /**
      * Update parking spot.
@@ -22,8 +23,8 @@ public class DBConstants {
      * Save ticket.
      */
     public static final String SAVE_TICKET =
-            "insert into ticket(PARKING_NUMBER, VEHICLE_REG_NUMBER, "
-                    + "PRICE, IN_TIME, OUT_TIME) values(?,?,?,?,?)";
+            "insert into ticket (PARKING_NUMBER, VEHICLE_REG_NUMBER, "
+                    + "PRICE, IN_TIME, OUT_TIME) values (?,?,?,?,?)";
 
     /**
      * Update ticket.
@@ -35,8 +36,20 @@ public class DBConstants {
      * Get ticket.
      */
     public static final String GET_TICKET =
-            "select t.PARKING_NUMBER, t.ID, t.PRICE, t.IN_TIME, t.OUT_TIME,"
-                    + "p.TYPE from ticket t,parking p where p.parking_number "
-                    + "= t.parking_number and"
-                    + "t.VEHICLE_REG_NUMBER=? order by t.IN_TIME  limit 1";
+            "select t.PARKING_NUMBER, t.ID, t.PRICE, "
+                    + "t.IN_TIME, t.OUT_TIME, p.TYPE "
+                    + "from ticket t,parking p "
+                    + "where p.parking_number = t.parking_number and "
+                    + "t.VEHICLE_REG_NUMBER=?"
+                    + "order by t.IN_TIME DESC limit 1";
+
+    /**
+     * Find ticket by Vehicle Registration Number.
+     */
+    public static final String FIND_TICKET_BY_VEHICLE_REG_NUMBER =
+            "select * "
+                    + "from ticket "
+                    + "where VEHICLE_REG_NUMBER=? and "
+                    + "OUT_TIME IS NOT NULL "
+                    + "limit 1";
 }

@@ -13,26 +13,26 @@ import java.util.Scanner;
 import static org.junit.jupiter.api.Assertions.*;
 
 @ExtendWith(MockitoExtension.class)
-public class InputReaderUtilTest {
+class InputReaderUtilTest {
 
     private static InputReaderUtil inputReaderUtil;
 
     private static final InputStream stdin = System.in;
 
 
-    public void provideInput(String inputString) {
+    void provideInput(String inputString) {
         InputStream inputStream = new ByteArrayInputStream(inputString.getBytes());
         Scanner scan = new Scanner(inputStream);
         inputReaderUtil = new InputReaderUtil(scan);
     }
 
     @AfterEach
-    public void restoreSystemInput() {
+    void restoreSystemInput() {
         System.setIn(stdin);
     }
 
     @Test
-    public void readSelectionTest1() {
+    void readSelectionTest1() {
         final String inputString = "1";
         provideInput(inputString);
 
@@ -40,7 +40,7 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void readSelectionTestException() {
+    void readSelectionTestException() {
         final String inputString = "test";
         provideInput(inputString);
 
@@ -48,7 +48,7 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void readVehicleRegistrationNumberTestInvalid() {
+    void readVehicleRegistrationNumberTestInvalid() {
         final String vehicleRegNumber = " ";
         provideInput(vehicleRegNumber);
 
@@ -56,8 +56,8 @@ public class InputReaderUtilTest {
     }
 
     @Test
-    public void readVehicleRegistrationNumberTestValid() {
-        final String vehicleRegNumber = "123 ABC 456";
+    void readVehicleRegistrationNumberTestValid() {
+        final String vehicleRegNumber = "123ABC456";
         provideInput(vehicleRegNumber);
 
         assertEquals(vehicleRegNumber, inputReaderUtil.readVehicleRegistrationNumber());

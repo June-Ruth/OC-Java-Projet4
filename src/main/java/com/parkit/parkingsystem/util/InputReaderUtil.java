@@ -20,8 +20,12 @@ public class InputReaderUtil {
     private static final Logger LOGGER
             = LogManager.getLogger(InputReaderUtil.class);
 
-    public InputReaderUtil(final Scanner scan) {
-        this.scan = scan;
+    /**
+     * Define Input origin at Scanner.
+     * @param pScan Scanner
+     */
+    public InputReaderUtil(final Scanner pScan) {
+        this.scan = pScan;
     }
 
     /**
@@ -30,8 +34,7 @@ public class InputReaderUtil {
      */
     public int readSelection() {
         try {
-            int input = Integer.parseInt(scan.nextLine());
-            return input;
+            return Integer.parseInt(scan.nextLine());
         } catch (Exception e) {
             LOGGER.error("Error while reading user input from Shell", e);
             LOGGER.info("Error reading input."
